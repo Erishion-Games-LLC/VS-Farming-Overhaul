@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="FarmingOverhaul/FarmingOverhaul/FarmingOverhaul.csproj" />
+  <Project Path="FarmingOverhaul/ZZCakeBuild/CakeBuild.csproj" />
+</Solution>

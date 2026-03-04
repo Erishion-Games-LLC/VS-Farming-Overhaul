@@ -1,0 +1,13 @@
+{
+    "code": "simplewand",
+    "creativeinventory": {
+        "general": ["*"],
+        "farmingoverhaul": ["*"]
+    },
+    "texture": {
+        "base": "item/simplewand"
+    },
+    "shape": {
+        "base": "item/simplewand"
+    }
+}

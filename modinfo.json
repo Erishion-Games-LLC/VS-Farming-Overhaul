@@ -1,0 +1,10 @@
+{
+  "type": "content",
+  "modid": "farmingoverhaul",
+  "name": "Farming Overhaul",
+  "authors": [
+    "Ben @ Erishion Games LLC"
+  ],
+  "description": "An overhaul of the farming system",
+  "version": "1.0.0"
+}

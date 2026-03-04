@@ -1,0 +1,58 @@
+[
+  {
+    "op": "replace",
+    "path": "/cropProps/totalGrowthMonths",
+    "value": 3,
+    "file": "game:blocktypes/plant/crop/amaranth.json",
+    "side": "Server"
+  },
+  {
+    "op": "replace",
+    "path": "/dropsByType/*/0/quantity/avg",
+    "value": 0,
+    "file": "game:blocktypes/plant/crop/amaranth.json",
+    "side": "Server"
+  },
+  {
+    "op": "replace",
+    "path": "/dropsByType/*-8/0/quantity/avg",
+    "value": 0,
+    "file": "game:blocktypes/plant/crop/amaranth.json",
+    "side": "Server"
+  },
+  {
+    "op": "replace",
+    "path": "/dropsByType/*-8/1/quantity/avg",
+    "value": 0,
+    "file": "game:blocktypes/plant/crop/amaranth.json",
+    "side": "Server"
+  },
+  {
+    "op": "replace",
+    "path": "/dropsByType/*-8/1/quantity/var",
+    "value": 1,
+    "file": "game:blocktypes/plant/crop/amaranth.json",
+    "side": "Server"
+  },
+  {
+    "op": "replace",
+    "path": "/dropsByType/*-9/0/quantity/avg",
+    "value": 0,
+    "file": "game:blocktypes/plant/crop/amaranth.json",
+    "side": "Server"
+  },
+  {
+    "op": "replace",
+    "path": "/dropsByType/*-9/1/quantity/avg",
+    "value": 1.1,
+    "file": "game:blocktypes/plant/crop/amaranth.json",
+    "side": "Server"
+  },
+  {
+    "op": "replace",
+    "path": "/dropsByType/*-9/1/quantity/var",
+    "value": 0,
+    "file": "game:blocktypes/plant/crop/amaranth.json",
+    "side": "Server"
+  }
+]

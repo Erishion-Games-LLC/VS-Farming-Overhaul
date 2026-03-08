@@ -1,4 +1,5 @@
 using FarmingOverhaul.assets.farmingoverhaul.configs;
+using HarmonyLib;
 using System;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -10,6 +11,7 @@ namespace FarmingOverhaul
     {
         private static FarmingOverhaulServerConfig? serverConfig;
         private static FarmingOverhaulClientConfig? clientConfig;
+        private Harmony? harmony;
 
         public override void Start(ICoreAPI api)
         {
@@ -18,6 +20,7 @@ namespace FarmingOverhaul
         public override void StartServerSide(ICoreServerAPI api)
         {
             serverConfig = LoadConfig<FarmingOverhaulServerConfig>(api);
+            InitializeHarmony();
         }
 
         public override void StartClientSide(ICoreClientAPI api)
@@ -46,6 +49,12 @@ namespace FarmingOverhaul
                 config = new T();
             }
             return config;
+        }
+
+        private void InitializeHarmony()
+        {
+            harmony = new(Mod.Info.ModID);
+            harmony.PatchAll();
         }
     }
 }

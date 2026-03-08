@@ -1,4 +1,6 @@
+using FarmingOverhaul.assets.farmingoverhaul.blocks;
 using FarmingOverhaul.assets.farmingoverhaul.configs;
+using FarmingOverhaul.assets.farmingoverhaul.items;
 using HarmonyLib;
 using System;
 using Vintagestory.API.Client;
@@ -15,6 +17,8 @@ namespace FarmingOverhaul
 
         public override void Start(ICoreAPI api)
         {
+            api.RegisterBlockClass(Mod.Info.ModID + ".trampoline", typeof(BlockTrampoline));
+            api.RegisterItemClass(Mod.Info.ModID + ".thornsblade", typeof(ItemThornsBlade));
         }
 
         public override void StartServerSide(ICoreServerAPI api)

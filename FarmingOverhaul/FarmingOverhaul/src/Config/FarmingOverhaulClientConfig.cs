@@ -1,4 +1,4 @@
-﻿namespace FarmingOverhaul.assets.farmingoverhaul.configs
+﻿namespace FarmingOverhaul.src.Config
 {
     public class FarmingOverhaulClientConfig
     {

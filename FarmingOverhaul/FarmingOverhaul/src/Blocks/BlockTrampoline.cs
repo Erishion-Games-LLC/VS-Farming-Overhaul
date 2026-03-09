@@ -7,7 +7,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 
-namespace FarmingOverhaul.assets.farmingoverhaul.blocks
+namespace FarmingOverhaul.src.Blocks
 {
     internal class BlockTrampoline : Block
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 
-namespace FarmingOverhaul.assets.farmingoverhaul.items
+namespace FarmingOverhaul.src.Items
 {
     internal class ItemThornsBlade : Item
     {

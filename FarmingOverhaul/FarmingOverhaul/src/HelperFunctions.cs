@@ -1,4 +1,5 @@
 using System;
+
 namespace FarmingOverhaul
 {
     public static class HelperFunctions

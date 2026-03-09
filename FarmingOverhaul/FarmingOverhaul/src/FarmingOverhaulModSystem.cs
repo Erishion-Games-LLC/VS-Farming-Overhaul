@@ -1,13 +1,13 @@
-using FarmingOverhaul.assets.farmingoverhaul.blocks;
-using FarmingOverhaul.assets.farmingoverhaul.configs;
-using FarmingOverhaul.assets.farmingoverhaul.items;
+﻿using FarmingOverhaul.src.Blocks;
+using FarmingOverhaul.src.Config;
+using FarmingOverhaul.src.Items;
 using HarmonyLib;
 using System;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
-namespace FarmingOverhaul
+namespace FarmingOverhaul.src
 {
     public class FarmingOverhaulModSystem : ModSystem
     {
@@ -42,14 +42,14 @@ namespace FarmingOverhaul
                 config = api.LoadModConfig<T>(fileName);
                 if (config == null)
                 {
-                    Mod.Logger.Error(fileName + " is null. Loading default values.");
+                    Mod.Logger.Warning(fileName + " is null. Loading default values.");
                     config = new T();
                 }
                 api.StoreModConfig(config, fileName);
             }
             catch (Exception e)
             {
-                Mod.Logger.Error(e + ": Could not load " + fileName + ". Loading default values.");
+                Mod.Logger.Warning(e + ": Could not load " + fileName + ". Loading default values.");
                 config = new T();
             }
             return config;

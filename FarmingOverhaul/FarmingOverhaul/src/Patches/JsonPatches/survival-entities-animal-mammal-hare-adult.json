@@ -1,0 +1,38 @@
+[
+  {
+    "op": "replace",
+    "path": "/client/behaviors/4",
+    "value": {
+      "code": "foanimalstate"
+    },
+    "file": "game:entities/animal/mammal/hare-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/client/behaviors/5",
+    "value": {
+      "code": "fobreeding"
+    },
+    "file": "game:entities/animal/mammal/hare-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "replace",
+    "path": "/server/behaviors/9",
+    "value": {
+      "code": "foanimalstate"
+    },
+    "file": "game:entities/animal/mammal/hare-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/10",
+    "value": {
+      "code": "fobreeding"
+    },
+    "file": "game:entities/animal/mammal/hare-adult.json",
+    "side": "Server"
+  }
+]

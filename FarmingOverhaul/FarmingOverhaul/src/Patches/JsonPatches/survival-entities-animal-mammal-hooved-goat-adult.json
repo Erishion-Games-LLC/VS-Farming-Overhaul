@@ -1,0 +1,390 @@
+[
+  {
+    "op": "remove",
+    "path": "/client/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/client/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/client/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/client/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/client/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/client/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "replace",
+    "path": "/client/behaviors/0",
+    "value": {
+      "code": "foanimalstate"
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/client/behaviors/1",
+    "value": {
+      "code": "repulseagents"
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/client/behaviors/2",
+    "value": {
+      "code": "controlledphysics",
+      "stepHeight": 3.1251
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/client/behaviors/3",
+    "value": {
+      "code": "interpolateposition"
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/client/behaviors/4",
+    "value": {
+      "code": "floatupwhenstuck",
+      "onlyWhenDead": true
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/client/behaviors/5",
+    "value": {
+      "code": "harvestable"
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/client/behaviors/6",
+    "value": {
+      "code": "fobreeding"
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/client/behaviors/7",
+    "value": {
+      "code": "folactation",
+      "enabledByType": {
+        "*-adult-female": true,
+        "*": false
+      }
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/server/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/server/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/server/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/server/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/server/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/server/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/server/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/server/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/server/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "remove",
+    "path": "/server/behaviors/0",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "replace",
+    "path": "/server/behaviors/0",
+    "value": {
+      "code": "foanimalstate"
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/1",
+    "value": {
+      "code": "ropetieable",
+      "minGeneration": 2
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/2",
+    "value": {
+      "code": "repulseagents"
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/3",
+    "value": {
+      "code": "controlledphysics",
+      "stepHeight": 3.1251
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/4",
+    "value": {
+      "code": "despawn",
+      "minPlayerDistance": 8,
+      "belowLightLevel": 8,
+      "minSeconds": 300
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/5",
+    "value": {
+      "code": "health",
+      "currenthealthByType": {
+        "goat-markhor-adult-male": 20,
+        "goat-muskox-adult-male": 25,
+        "goat-takingold-adult-male": 25,
+        "goat-turdag-adult-male": 20,
+        "*-adult-male": 19,
+        "*-adult-female": 17
+      },
+      "maxhealthByType": {
+        "goat-markhor-adult-male": 20,
+        "goat-muskox-adult-male": 25,
+        "goat-takingold-adult-male": 25,
+        "goat-turdag-adult-male": 20,
+        "*-adult-male": 19,
+        "*-adult-female": 17
+      }
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/6",
+    "value": {
+      "code": "deaddecay",
+      "hoursToDecay": 96,
+      "decayedBlockByType": {
+        "goat-muskox-*": "carcass-large",
+        "goat-takingold-*": "carcass-large",
+        "*": "carcass-medium"
+      }
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/7",
+    "value": {
+      "code": "floatupwhenstuck",
+      "onlyWhenDead": true
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/8",
+    "value": {
+      "code": "harvestable",
+      "drops": [
+        {
+          "type": "item",
+          "code": "redmeat-raw",
+          "quantityByType": {
+            "goat-muskox-*": {
+              "avg": 16,
+              "var": 3
+            },
+            "goat-takingold-*": {
+              "avg": 16,
+              "var": 3
+            },
+            "*": {
+              "avg": 12,
+              "var": 3
+            }
+          }
+        },
+        {
+          "type": "item",
+          "code": "hide-raw-large",
+          "quantityByType": {
+            "goat-muskox-*": {
+              "avg": 1.7,
+              "var": 0.0
+            },
+            "goat-takingold-*": {
+              "avg": 1.0,
+              "var": 0.0
+            },
+            "*": {
+              "avg": 0,
+              "var": 0
+            }
+          }
+        },
+        {
+          "type": "item",
+          "code": "hide-raw-medium",
+          "quantityByType": {
+            "goat-muskox-*": {
+              "avg": 0.0,
+              "var": 0.0
+            },
+            "goat-takingold-*": {
+              "avg": 0.0,
+              "var": 0.0
+            },
+            "*": {
+              "avg": 1.7,
+              "var": 0
+            }
+          }
+        },
+        {
+          "type": "item",
+          "code": "fat",
+          "quantityByType": {
+            "goat-muskox-*": {
+              "avg": 2.9,
+              "var": 0.5
+            },
+            "goat-takingold-*": {
+              "avg": 1.7,
+              "var": 0.5
+            },
+            "*": {
+              "avg": 1.7,
+              "var": 0
+            }
+          }
+        }
+      ]
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/9",
+    "value": {
+      "code": "breathe"
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/10",
+    "value": {
+      "code": "fobreeding"
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  },
+  {
+    "op": "add",
+    "path": "/server/behaviors/11",
+    "value": {
+      "code": "folactation",
+      "enabledByType": {
+        "*-adult-female": true,
+        "*": false
+      }
+    },
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "side": "Server"
+  }
+]

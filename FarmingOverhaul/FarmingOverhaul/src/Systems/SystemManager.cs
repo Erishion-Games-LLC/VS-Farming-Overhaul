@@ -1,7 +1,7 @@
 ﻿using FarmingOverhaul.src.Config;
 using Vintagestory.API.Common;
 
-namespace FarmingOverhaul.src
+namespace FarmingOverhaul.src.Systems
 {
     public class SystemManager
     {

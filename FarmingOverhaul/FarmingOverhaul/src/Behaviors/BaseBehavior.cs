@@ -7,6 +7,7 @@ namespace FarmingOverhaul.src.Behaviors
 {
     public abstract class BaseBehavior(Entity entity) : EntityBehavior(entity)
     {
+        public const string BaseBehaviorKey = "fobasebehavior";
         public abstract string PropertyNameKey { get; }
         protected ITreeAttribute Tree;
         public abstract string TreeKey { get; }

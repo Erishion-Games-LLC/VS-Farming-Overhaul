@@ -7,7 +7,8 @@ namespace FarmingOverhaul.src.Behaviors
 {
     public class BreedingBehavior(Entity entity) : BaseBehavior(entity)
     {
-        public override string PropertyNameKey => AttributeKeys.BreedingBehaviorKey;
+        public const string BreedingBehaviorKey = "fobreeding";
+        public override string PropertyNameKey => BreedingBehaviorKey;
         public override string PropertyName() => PropertyNameKey;
         public override string TreeKey => PropertyNameKey;
 
@@ -17,27 +18,26 @@ namespace FarmingOverhaul.src.Behaviors
         public int MinDaysPregnant;
         public int MaxDaysPregnant;
 
+        public double PregnancyLengthDays
+        {
+            get { return GetDoubleFromTree(nameof(PregnancyLengthDays)); }
+            set { SetDoubleInTree(nameof(PregnancyLengthDays), value); }
+        }
         public bool LateGestation
         {
-            get
+            get { return GetBoolFromTree(nameof(LateGestation)); }
+            set { SetBoolInTree(nameof(LateGestation), value); }
+        }
             {
-                return GetBoolFromTree(AttributeKeys.LateGestationKey);
             }
-            set
             {
-                SetBoolInTree(AttributeKeys.LateGestationKey, value);
             }
         }
 
-        public int PregnancyLength
         {
-            get
             {
-                return GetIntFromTree(AttributeKeys.PregnancyLengthKey);
             }
-            set
             {
-                SetIntInTree(AttributeKeys.PregnancyLengthKey, value);
             }
         }
 

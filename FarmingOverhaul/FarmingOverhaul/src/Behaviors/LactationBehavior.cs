@@ -7,6 +7,9 @@ namespace FarmingOverhaul.src.Behaviors
 {
     public class LactationBehavior(Entity entity) : EntityBehaviorMilkable(entity)
     {
+        public const string LactationKey = "folactation";
+
+
         public override void Initialize(EntityProperties properties, JsonObject attributes)
         {
             base.Initialize(properties, attributes);

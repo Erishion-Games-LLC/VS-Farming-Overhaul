@@ -18,10 +18,10 @@ namespace FarmingOverhaul.src
             string ModID = Mod.Info.ModID;
             api.RegisterBlockClass(ModID + ".trampoline", typeof(BlockTrampoline));
             api.RegisterItemClass(ModID + ".thornsblade", typeof(ItemThornsBlade));
-            api.RegisterEntityBehaviorClass(AttributeKeys.BreedingBehaviorKey, typeof(BreedingBehavior));
-            api.RegisterEntityBehaviorClass(AttributeKeys.AnimalStateKey, typeof(AnimalState));
-            api.RegisterEntityBehaviorClass(AttributeKeys.BaseBehaviorKey, typeof(BaseBehavior));
-            api.RegisterEntityBehaviorClass(AttributeKeys.LactationKey, typeof(LactationBehavior));
+            api.RegisterEntityBehaviorClass(BreedingBehavior.BreedingBehaviorKey, typeof(BreedingBehavior));
+            api.RegisterEntityBehaviorClass(AnimalState.AnimalStateKey, typeof(AnimalState));
+            api.RegisterEntityBehaviorClass(BaseBehavior.BaseBehaviorKey, typeof(BaseBehavior));
+            api.RegisterEntityBehaviorClass(LactationBehavior.LactationKey, typeof(LactationBehavior));
 
             Interfacer.Initialize(api);
         }
@@ -58,7 +58,7 @@ namespace FarmingOverhaul.src
             //if entity should have the custom breeding behavior but doesn't for some reason, add it.
             if (Interfacer.SystemManager.ConfigManager.ServerConfig.Species.ContainsKey(species))
             {
-                if (!entity.HasBehavior(AttributeKeys.BreedingBehaviorKey))
+                if (!entity.HasBehavior(BreedingBehavior.BreedingBehaviorKey))
                 {
                     entity.Api.Logger.Notification("Didn't have breeding behavior but should: " + species);
                     entity.AddBehavior(new BreedingBehavior(entity));

@@ -6,7 +6,9 @@ namespace FarmingOverhaul.src.Behaviors
 {
     public class AnimalState(Entity entity) : BaseBehavior(entity)
     {
-        public override string PropertyNameKey => AttributeKeys.AnimalStateKey;
+        public const string AnimalStateKey = "foanimalstate";
+        public override string PropertyNameKey => AnimalStateKey;
+        public override string PropertyName() => PropertyNameKey;
         public override string TreeKey => PropertyNameKey;
 
         protected string Gender { get; private set; }
@@ -24,15 +26,12 @@ namespace FarmingOverhaul.src.Behaviors
             Species = HelperFunctions.GetSpeciesStringLowerFromEntity(entity);
             constants = GetAnimalConstants(Species);
 
-            Type = entity.Properties.Variant.TryGetValue(AttributeKeys.TypeKey);
-            Age = entity.Properties.Variant.TryGetValue(AttributeKeys.AgeKey);
-            Gender = entity.Properties.Variant.TryGetValue(AttributeKeys.GenderKey);
 
         }
 
-        public override string PropertyName()
-        {
-            return PropertyNameKey;
+            Type = entity.Properties.Variant.TryGetValue(nameof(Type).ToLower());
+            Age = entity.Properties.Variant.TryGetValue(nameof(Age).ToLower());
+            Gender = entity.Properties.Variant.TryGetValue(nameof(Gender).ToLower());
         }
 
         private AnimalConstants GetAnimalConstants(string species)

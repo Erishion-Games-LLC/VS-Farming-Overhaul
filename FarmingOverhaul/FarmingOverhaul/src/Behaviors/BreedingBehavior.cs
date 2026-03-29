@@ -1,7 +1,6 @@
 ﻿using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
-using static FarmingOverhaul.src.Config.FarmingOverhaulServerConfig;
 
 namespace FarmingOverhaul.src.Behaviors
 {
@@ -15,8 +14,8 @@ namespace FarmingOverhaul.src.Behaviors
         private AnimalState animalState;
         private AnimalConstants constants;
 
-        public int MinDaysPregnant;
-        public int MaxDaysPregnant;
+        public double MinDaysPregnant;
+        public double MaxDaysPregnant;
 
         public double PregnancyLengthDays
         {
@@ -27,18 +26,6 @@ namespace FarmingOverhaul.src.Behaviors
         {
             get { return GetBoolFromTree(nameof(LateGestation)); }
             set { SetBoolInTree(nameof(LateGestation), value); }
-        }
-            {
-            }
-            {
-            }
-        }
-
-        {
-            {
-            }
-            {
-            }
         }
 
 
@@ -52,7 +39,7 @@ namespace FarmingOverhaul.src.Behaviors
                 logger.Error("FARMING OVERHAUL animal state is null for: " + HelperFunctions.GetSpeciesStringLowerFromEntity(entity));
                 return; 
             }
-            constants = animalState.constants;
+            constants = animalState.Constants;
 
             MinDaysPregnant = constants.MinDaysPregnant;
             MaxDaysPregnant = constants.MaxDaysPregnant;

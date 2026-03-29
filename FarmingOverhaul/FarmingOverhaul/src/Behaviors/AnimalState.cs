@@ -1,6 +1,5 @@
 ﻿using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
-using static FarmingOverhaul.src.Config.FarmingOverhaulServerConfig;
 
 namespace FarmingOverhaul.src.Behaviors
 {
@@ -14,9 +13,9 @@ namespace FarmingOverhaul.src.Behaviors
         protected string Gender { get; private set; }
         protected string Age { get; private set; }
         public string Type { get; private set; }
+        public AnimalConstants Constants { get; private set; }
 
         public string Species { get; private set; }
-        public AnimalConstants constants { get; private set; }
 
 
         public override void Initialize(EntityProperties properties, JsonObject attributes)
@@ -24,10 +23,7 @@ namespace FarmingOverhaul.src.Behaviors
             base.Initialize(properties, attributes);
 
             Species = HelperFunctions.GetSpeciesStringLowerFromEntity(entity);
-            constants = GetAnimalConstants(Species);
-
-
-        }
+            Constants = GetAnimalConstants(Species);
 
             Type = entity.Properties.Variant.TryGetValue(nameof(Type).ToLower());
             Age = entity.Properties.Variant.TryGetValue(nameof(Age).ToLower());

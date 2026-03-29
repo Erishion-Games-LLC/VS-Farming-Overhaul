@@ -107,27 +107,5 @@ namespace FarmingOverhaul.src.Config
             //LowerTempRange = ,
             //UpperTempRange = 
         };
-
-        public class AnimalConstants
-        {
-            public double MaintenanceEnergyReqConst;
-            public double BodyWeightExponent;
-            public double GrowthCoefficient;
-
-            public double LactationEnergyReqConst;
-            public int KCalPerKgWeightChange;
-
-            public int MinDaysPregnant;
-            public int MaxDaysPregnant;
-            public double LateGestationPercent;
-
-            public double BaseFetusEnergyModifier;
-            public double AdditionalFetusEnergyModifier;
-            public double EarlyGestationFetusEnergyModifier;
-
-            public double KCalPerKgMilkProduced;
-            public double LowerTempRange;
-            public double UpperTempRange;
-        }
     }
 }

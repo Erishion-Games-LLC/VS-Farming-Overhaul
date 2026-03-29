@@ -1,10 +1,16 @@
 ﻿using Vintagestory.API.Common;
-using Vintagestory.GameContent;
 
 namespace FarmingOverhaul.src
 {
     public class AnimalConstants
     {
+        //Constants used by WeightBehavior mainly
+        public double MaintenanceEnergyReqCons;
+        public double BodyWeightExponent;
+        public double GrowthCoefficient;
+        public double LactationEnergyReqConst;
+        public double KCalPerKgWeightChange;
+
         //Constants used by BreedingBehavior mainly
         public double MinDaysPregnant;
         public double MaxDaysPregnant;

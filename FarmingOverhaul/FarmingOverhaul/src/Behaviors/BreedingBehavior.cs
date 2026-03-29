@@ -13,6 +13,7 @@ namespace FarmingOverhaul.src.Behaviors
 
         private AnimalState animalState;
         private AnimalConstants constants;
+        private WeightBehavior weightBehavior;
 
         public double MinDaysPregnant;
         public double MaxDaysPregnant;
@@ -33,8 +34,10 @@ namespace FarmingOverhaul.src.Behaviors
         {
             base.Initialize(properties, attributes);
             animalState = entity.GetBehavior<AnimalState>();
+            weightBehavior = entity.GetBehavior<WeightBehavior>();
 
             if (animalState == null)
+            if (animalState == null || weightBehavior == null)
             {
                 Logger.Error("FARMING OVERHAUL missing required behaviors for Breeding Behavior to function: " + GetSpeciesStringLowerFromEntity(entity));
                 return;

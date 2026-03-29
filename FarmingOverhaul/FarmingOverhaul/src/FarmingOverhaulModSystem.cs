@@ -22,6 +22,7 @@ namespace FarmingOverhaul.src
             api.RegisterEntityBehaviorClass(AnimalState.AnimalStateKey, typeof(AnimalState));
             api.RegisterEntityBehaviorClass(BaseBehavior.BaseBehaviorKey, typeof(BaseBehavior));
             api.RegisterEntityBehaviorClass(LactationBehavior.LactationKey, typeof(LactationBehavior));
+            api.RegisterEntityBehaviorClass(WeightBehavior.WeightBehaviorKey, typeof(WeightBehavior));
 
             Interfacer.Initialize(api);
         }

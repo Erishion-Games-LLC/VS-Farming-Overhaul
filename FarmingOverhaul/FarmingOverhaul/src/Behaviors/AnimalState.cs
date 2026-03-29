@@ -10,13 +10,29 @@ namespace FarmingOverhaul.src.Behaviors
         public override string PropertyName() => PropertyNameKey;
         public override string TreeKey => PropertyNameKey;
 
-        protected string Gender { get; private set; }
-        protected string Age { get; private set; }
-        public string Type { get; private set; }
         public AnimalConstants Constants { get; private set; }
 
-        public string Species { get; private set; }
 
+        public string Species
+        {
+            get { return GetStringFromTree(nameof(Species).ToLower()); }
+            set { SetStringInTree(nameof(Species).ToLower(), value); }
+        }
+        public string Gender
+        {
+            get { return GetStringFromTree(nameof(Gender).ToLower()); }
+            set { SetStringInTree(nameof(Gender).ToLower(), value); }
+        }
+        public string Age
+        {
+            get { return GetStringFromTree(nameof(Age).ToLower()); }
+            set { SetStringInTree(nameof(Age).ToLower(), value); }
+        }
+        public string Type
+        {
+            get { return GetStringFromTree(nameof(Type).ToLower()); }
+            set { SetStringInTree(nameof(Type).ToLower(), value); }
+        }
 
         public override void Initialize(EntityProperties properties, JsonObject attributes)
         {

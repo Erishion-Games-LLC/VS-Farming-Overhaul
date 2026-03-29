@@ -32,7 +32,7 @@ namespace FarmingOverhaul.src.Behaviors
 
         private AnimalConstants GetAnimalConstants(string species)
         {
-            if (config.Species.TryGetValue(species, out var constants))
+            if (Config.Species.TryGetValue(species, out var constants))
             {
                 return constants;
             }

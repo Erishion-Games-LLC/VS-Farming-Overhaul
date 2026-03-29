@@ -1,4 +1,5 @@
 ﻿using FarmingOverhaul.src.Config;
+using System;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
@@ -12,36 +13,55 @@ namespace FarmingOverhaul.src.Behaviors
         protected ITreeAttribute Tree;
         public abstract string TreeKey { get; }
 
-        public FarmingOverhaulServerConfig config;
-        public ICoreAPI api;
-        public ILogger logger;
-        public IWorldAccessor world;
+        public EntityProperties Properties { get; private set; }
+        public JsonObject Attributes { get; private set; }
+        public FarmingOverhaulServerConfig Config;
+        public ICoreAPI Api;
+        public ILogger Logger;
+        public IWorldAccessor World;
+        public IGameCalendar Calendar;
+        public Random Rand;
+        public EnumAppSide ApiSide;
 
         public override void Initialize(EntityProperties properties, JsonObject attributes)
         {
-            base.Initialize(properties, attributes);
-            api = entity.Api;
-            logger = api.Logger;
-            world = api.World;
-            
+            base.Initialize(properties, attributes);           
+            Api = entity.Api;
+            Logger = Api.Logger;
+            World = Api.World;
+            Calendar = World.Calendar;
+            Rand = World.Rand;
+            ApiSide = Api.Side;
+           
             Tree = entity.WatchedAttributes.GetTreeAttribute(TreeKey);
 
             Tree ??= new TreeAttribute();
-            if (entity.World.Side == EnumAppSide.Server)
-            {
-                entity.WatchedAttributes.SetAttribute(TreeKey, Tree);
-            }
+            if (ApiSide == EnumAppSide.Server) { entity.WatchedAttributes.SetAttribute(TreeKey, Tree); }
 
-            config = Interfacer.SystemManager.ConfigManager.ServerConfig;
             if (Interfacer.SystemManager.ConfigManager.ServerConfig == null)
             {
-                logger.Error("FarmingOverhaulServerConfig is null. Exiting Initialize on: " + entity.GetName());
+                Logger.Error("FarmingOverhaulServerConfig is null. Exiting Initialize on: " + entity.GetName());
                 return;
             }
 
+            Config = Interfacer.SystemManager.ConfigManager.ServerConfig;
+        }
+
+        public virtual void EnableTickListeners()
+        {
+        }
+
+        public virtual void DisableTickListeners()
+        {
         }
 
         protected void MarkPathDirty() => entity.WatchedAttributes.MarkPathDirty(TreeKey);
+
+        protected int GetIntFromWatchedAttributes(string key) => entity.WatchedAttributes.GetInt(key);
+        protected double GetDoubleFromWatchedAttributes(string key) => entity.WatchedAttributes.GetDouble(key);
+
+        protected void SetIntInWatchedAttributes(string key, int value) => entity.WatchedAttributes.SetInt(key, value);
+        protected void SetDoubleInWatchedAttributes(string key, int value) => entity.WatchedAttributes.SetDouble(key, value);
 
         protected int GetIntFromTree(string key) =>       Tree.GetInt(key);
         protected float GetFloatFromTree(string key) =>   Tree.GetFloat(key);

@@ -36,8 +36,8 @@ namespace FarmingOverhaul.src.Behaviors
 
             if (animalState == null)
             {
-                logger.Error("FARMING OVERHAUL animal state is null for: " + HelperFunctions.GetSpeciesStringLowerFromEntity(entity));
-                return; 
+                Logger.Error("FARMING OVERHAUL missing required behaviors for Breeding Behavior to function: " + GetSpeciesStringLowerFromEntity(entity));
+                return;
             }
             constants = animalState.Constants;
 

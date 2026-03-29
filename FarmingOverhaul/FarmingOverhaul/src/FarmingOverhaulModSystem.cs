@@ -32,7 +32,7 @@ namespace FarmingOverhaul.src
 
             api.Event.OnEntityLoaded += OnEntityLoadedHandler;
 
-            InitializeHarmony();
+            //InitializeHarmony();
         }
 
         public override void StartClientSide(ICoreClientAPI api)
@@ -40,6 +40,7 @@ namespace FarmingOverhaul.src
             Interfacer.SystemManager.StartClient(api);
         }
 
+        //Currently not using harmony, but may in the future.
         private void InitializeHarmony()
         {
             if (harmony != null)
@@ -52,7 +53,7 @@ namespace FarmingOverhaul.src
         }
 
         private void OnEntityLoadedHandler(Entity entity)
-         {
+        {
             string species = HelperFunctions.GetSpeciesStringLowerFromEntity(entity);
 
             //if entity should have the custom breeding behavior but doesn't for some reason, add it.

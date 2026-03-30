@@ -1,6 +1,7 @@
-﻿using Vintagestory.API.Common;
+using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
+using static FarmingOverhaul.src.HelperFunctions;
 
 namespace FarmingOverhaul.src.Behaviors
 {
@@ -15,8 +16,6 @@ namespace FarmingOverhaul.src.Behaviors
         private AnimalConstants constants;
         private WeightBehavior weightBehavior;
 
-        public double MinDaysPregnant;
-        public double MaxDaysPregnant;
 
         public double PregnancyLengthDays
         {
@@ -36,7 +35,6 @@ namespace FarmingOverhaul.src.Behaviors
             animalState = entity.GetBehavior<AnimalState>();
             weightBehavior = entity.GetBehavior<WeightBehavior>();
 
-            if (animalState == null)
             if (animalState == null || weightBehavior == null)
             {
                 Logger.Error("FARMING OVERHAUL missing required behaviors for Breeding Behavior to function: " + GetSpeciesStringLowerFromEntity(entity));
@@ -44,13 +42,34 @@ namespace FarmingOverhaul.src.Behaviors
             }
             constants = animalState.Constants;
 
-            MinDaysPregnant = constants.MinDaysPregnant;
-            MaxDaysPregnant = constants.MaxDaysPregnant;
+            if (ApiSide == EnumAppSide.Server) { EnableTickListeners(); }            
         }
 
         public override void OnEntityReceiveDamage(DamageSource damageSource, ref float damage)
         {
             base.OnEntityReceiveDamage(damageSource, ref damage);
+        }
+        public override void OnEntityDeath(DamageSource damageSourceForDeath)
+        {
+            base.OnEntityDeath(damageSourceForDeath);
+            DieOrDespawn();
+        }
+        public override void OnEntityDespawn(EntityDespawnData despawn)
+        {
+            base.OnEntityDespawn(despawn);
+            DieOrDespawn();
+        }
+
+        public void DieOrDespawn()
+        {
+            DisableTickListeners();
+        }
+        public override void EnableTickListeners()
+        {
+        }
+        
+        public override void DisableTickListeners()
+        {
         }
 
 
@@ -62,6 +81,6 @@ namespace FarmingOverhaul.src.Behaviors
         //        return false;
         //    }
         //    else return true;
-        //}
+        //}      
     }
 }

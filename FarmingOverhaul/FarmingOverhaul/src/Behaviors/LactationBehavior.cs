@@ -5,6 +5,7 @@ using Vintagestory.GameContent;
 
 namespace FarmingOverhaul.src.Behaviors
 {
+    //need to eventually overwrited and implement BaseBehavior
     public class LactationBehavior(Entity entity) : EntityBehaviorMilkable(entity)
     {
         public const string LactationKey = "folactation";

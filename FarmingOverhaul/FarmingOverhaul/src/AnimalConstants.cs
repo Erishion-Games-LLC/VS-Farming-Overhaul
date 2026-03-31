@@ -5,7 +5,7 @@ namespace FarmingOverhaul.src
     public class AnimalConstants
     {
         //Constants used by WeightBehavior mainly
-        public double MaintenanceEnergyReqCons;
+        public double MaintenanceEnergyReqConst;
         public double BodyWeightExponent;
         public double GrowthCoefficient;
         public double LactationEnergyReqConst;

@@ -12,7 +12,6 @@ namespace FarmingOverhaul.src.Behaviors
 
         public AnimalConstants Constants { get; private set; }
 
-
         public string Species
         {
             get { return GetStringFromTree(nameof(Species).ToLower()); }
@@ -32,6 +31,11 @@ namespace FarmingOverhaul.src.Behaviors
         {
             get { return GetStringFromTree(nameof(Type).ToLower()); }
             set { SetStringInTree(nameof(Type).ToLower(), value); }
+        }
+        public int Generation
+        {
+            get { return GetIntFromWatchedAttributes(nameof(Generation).ToLower()); }
+            set { SetIntInWatchedAttributes(nameof(Generation).ToLower(), value); }
         }
 
         public override void Initialize(EntityProperties properties, JsonObject attributes)

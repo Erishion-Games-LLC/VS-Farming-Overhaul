@@ -55,17 +55,17 @@ namespace FarmingOverhaul.src
 
         private void OnEntityLoadedHandler(Entity entity)
         {
-            string species = HelperFunctions.GetSpeciesStringLowerFromEntity(entity);
+            //string species = HelperFunctions.GetSpeciesStringLowerFromEntity(entity);
 
-            //if entity should have the custom breeding behavior but doesn't for some reason, add it.
-            if (Interfacer.SystemManager.ConfigManager.ServerConfig.Species.ContainsKey(species))
-            {
-                if (!entity.HasBehavior(BreedingBehavior.BreedingBehaviorKey))
-                {
-                    entity.Api.Logger.Notification("Didn't have breeding behavior but should: " + species);
-                    entity.AddBehavior(new BreedingBehavior(entity));
-                }
-            }
+            ////if entity should have the custom breeding behavior but doesn't for some reason, add it.
+            //if (Interfacer.SystemManager.ConfigManager.ServerConfig.Species.ContainsKey(species))
+            //{
+            //    if (!entity.HasBehavior(BreedingBehavior.BreedingBehaviorKey))
+            //    {
+            //        entity.Api.Logger.Notification("Didn't have breeding behavior but should: " + species);
+            //        entity.AddBehavior(new BreedingBehavior(entity));
+            //    }
+            //}
         }
     }
 }

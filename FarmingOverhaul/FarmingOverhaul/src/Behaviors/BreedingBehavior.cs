@@ -5,6 +5,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 using static FarmingOverhaul.src.HelperFunctions;
+using static FarmingOverhaul.src.Behaviors.BreedingLogic;
 
 namespace FarmingOverhaul.src.Behaviors
 {
@@ -180,33 +181,26 @@ namespace FarmingOverhaul.src.Behaviors
             {
                 Logger.Error("Is Pregnant");
 
-                if (TryGiveBirth())
+                if (ShouldGiveBirth(Calendar.TotalDays, PregnancyStartTotalDays, PregnancyLengthDays))
                 {
+                    GiveBirth();
                     EndPregnancy();
                 }
                 return;
             }
 
             //If animal is not pregnant, check if it can start estrus cycle.
-            if (TryStartEstrusCycle()) return;
+            if (ShouldStartEstrusCycle(EstrusCycleTotalStartDays, IsPregnant, constants.BreedingSeason, Calendar.MonthName, Calendar.TotalDays, BeforeCanBePregnantAgainTotalDays))
+            {
+                StartEstrusCycle();
+                return;
+            }
 
             //If animals estrus cycle has already started, check if it should end.
-            if (Calendar.TotalDays - EstrusCycleTotalStartDays >= EstrusCycleLengthDays)
+            if (ShouldEndEstrusCycle(Calendar.TotalDays, EstrusCycleTotalStartDays, EstrusCycleLengthDays))
             {
                 EndEstrusCycle();
             }
-        }
-
-        //Attempts to initiate the estrus cycle for the female animal if all required conditions are met.
-        protected bool TryStartEstrusCycle()
-        {
-            //If the animal is pregnant or if the cycle is already started, end the repeating function
-            if (EstrusCycleTotalStartDays != -1 || IsPregnant) { return false; }
-
-            //If it is not the breeding season or if the animal hasn't recovered from a previous pregnancy yet, repeat the function to check again later
-            if (!IsBreedingSeason() || IsBreedingCooldownActive()) { return false; }
-
-            StartEstrusCycle(); return true;
         }
 
         //DONE
@@ -252,49 +246,7 @@ namespace FarmingOverhaul.src.Behaviors
             TotalDaysWhenPeakFertilityStarts = -1;
             TotalDaysWhenPeakFertilityEnds = -1;
         }
-
-        //TODO Eventually check based on species specific needs, like shorter daylight hours for sheep.
-        //Is the current month in the animals breeding season?
-        protected bool IsBreedingSeason()
-        {
-            if (constants.BreedingSeason == null) { return false; }
-            if (constants.BreedingSeason.Contains(Calendar.MonthName)) return true;
-            else return false;
-        }
-
-        //DONE
-        //Has the required time passed for the animal to breed again?
-        protected bool IsBreedingCooldownActive()
-        {
-            if (Calendar.TotalDays >= BeforeCanBePregnantAgainTotalDays) return false;
-            else return true;
-        }
-
-        //DONE
-        /*If the current amount of time passed is inbetween the min and max amount of time passed for this heat, then the animal is in heat*/
-        protected bool IsInHeat()
-        {
-            double heatBeginsTotalDays = EstrusCycleTotalStartDays + (EstrusCycleTimeBeforeHeatHours / 24);
-            double heatEndsTotalDays = heatBeginsTotalDays + (EstrusCycleHeatDurationHours / 24);
-            double totalDays = Calendar.TotalDays;
-
-            if (totalDays >= heatBeginsTotalDays && totalDays <= heatEndsTotalDays) return true;
-            else return false;
-        }
-       
-        //DONE
-        protected void TryGetPregnant()
-        {
-            //If already pregnant, exit
-            if (IsPregnant) return;
-
-            //See if impregnation should fail based on the base impregnation fail chance and the modifiers to it.
-            if (Rand.NextDouble() <= CalculateImpregnationFailChance()) return;
-
-            //Impregnation was successful, so get pregnant.
-            GetPregnant();
-        }
-
+                  
         protected void GetPregnant()
         {
             //If already pregnant, don't do anything. Should never reach here
@@ -316,13 +268,6 @@ namespace FarmingOverhaul.src.Behaviors
             BeforeCanBePregnantAgainTotalDays = Calendar.TotalDays + SampleNormalDistributionInRange(Rand, constants.MinDaysBeforeBreedAgainFemale, constants.MaxDaysBeforeBreedAgainFemale);
         }
 
-        protected bool TryGiveBirth()
-        {
-            if (Calendar.TotalDays < PregnancyStartTotalDays + PregnancyLengthDays) return false;
-
-            GiveBirth(); return true;
-        }
-
         protected void GiveBirth()
         {
             while (FetusAmount > 0)
@@ -330,21 +275,6 @@ namespace FarmingOverhaul.src.Behaviors
                 FetusAmount -= 1;
                 SpawnChild(entity);
             }
-        }
-
-        //TODO
-        //Need to scale fail chance with weight, temp, health, age, etc.
-        //If the returned double is higher than a random double between 0 and 1, then impregnation fails. If it is lower, impregnation succeeds.
-        protected double CalculateImpregnationFailChance()
-        {
-            double baseFailChance = constants.ImpregnationFailChance;
-
-            if (TotalDaysWhenPeakFertilityStarts < 0 || TotalDaysWhenPeakFertilityEnds < 0) return baseFailChance;
-
-            double fertilityStrength = GetGaussianWeight(Calendar.TotalDays, TotalDaysWhenPeakFertilityStarts, TotalDaysWhenPeakFertilityEnds);
-            double failChance = baseFailChance * (1.0  - fertilityStrength);
-
-            return Math.Clamp(failChance, 0.0, 1.0);
         }
 
         //TODO
@@ -356,7 +286,7 @@ namespace FarmingOverhaul.src.Behaviors
             {
                 return;
             }
-            string gender = DetermineGender();
+            string gender = DetermineGender(Rand);
             var rand = World.Rand;
 
             string entityCode = $"{animalState.Species}-{animalState.Type}-baby-{gender}";
@@ -377,16 +307,6 @@ namespace FarmingOverhaul.src.Behaviors
             World.SpawnEntity(child);
         }
 
-
-        //TODO
-        //need to eventually add support for uneven sex distribution
-        protected string DetermineGender()
-        {     
-            //Roll a random integer between 0 and 1. If 0, gender is female. If 1, gender is male.
-            if (GenerateRandomIntFromMaxInclusive(Rand, 1) == 0) return "female";
-            else return "male";
-        }
-
         public override void GetInfoText(StringBuilder sb)
         {
             base.GetInfoText(sb);
@@ -399,8 +319,8 @@ namespace FarmingOverhaul.src.Behaviors
             }
             else
             {
-                sb.AppendLine($"In Heat: {IsInHeat()}");
-                sb.AppendLine($"Breeding Cooldown Active: {IsBreedingCooldownActive()}");
+                sb.AppendLine($"In Heat: {IsInHeat(EstrusCycleTotalStartDays, EstrusCycleTimeBeforeHeatHours, EstrusCycleHeatDurationHours, Calendar.TotalDays)}");
+                sb.AppendLine($"Breeding Cooldown Active: {IsBreedingCooldownActive(Calendar.TotalDays, BeforeCanBePregnantAgainTotalDays)}");
             }
         }
 

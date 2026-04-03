@@ -37,6 +37,7 @@ namespace FarmingOverhaul.src.Behaviors
             get { return GetIntFromWatchedAttributes(nameof(Generation).ToLower()); }
             set { SetIntInWatchedAttributes(nameof(Generation).ToLower(), value); }
         }
+        public string Origin;
 
         public override void Initialize(EntityProperties properties, JsonObject attributes)
         {
@@ -48,6 +49,7 @@ namespace FarmingOverhaul.src.Behaviors
             Type = entity.Properties.Variant.TryGetValue(nameof(Type).ToLower());
             Age = entity.Properties.Variant.TryGetValue(nameof(Age).ToLower());
             Gender = entity.Properties.Variant.TryGetValue(nameof(Gender).ToLower());
+            Origin = GetStringFromWatchedAttributes(nameof(Origin).ToLower());
         }
 
         private AnimalConstants GetAnimalConstants(string species)

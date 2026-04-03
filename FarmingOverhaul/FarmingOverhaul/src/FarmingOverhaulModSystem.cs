@@ -1,6 +1,7 @@
 ﻿using FarmingOverhaul.src.Behaviors;
 using FarmingOverhaul.src.Blocks;
 using FarmingOverhaul.src.Items;
+using FarmingOverhaul.src.Systems.Breeding;
 using HarmonyLib;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;

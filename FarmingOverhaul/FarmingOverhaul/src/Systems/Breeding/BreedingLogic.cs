@@ -1,8 +1,5 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Globalization;
+﻿using System;
 using System.Linq;
-using System.Reflection.Metadata;
 using Vintagestory.API.Common;
 using static FarmingOverhaul.src.HelperFunctions;
 
@@ -76,18 +73,6 @@ namespace FarmingOverhaul.src.Systems.Breeding
         public static bool ShouldGiveBirth(double totalDays, double pregnancyStartTotalDays, double pregnancyLengthDays)
         {
             if (totalDays < pregnancyStartTotalDays + pregnancyLengthDays) return false;
-
-            return true;
-        }
-
-        //Attempts to initiate the estrus cycle for the female animal if all required conditions are met.
-        public static bool ShouldStartEstrusCycle(double cycleTotalStartDays, bool isPregnant, EnumMonth[] breedingSeason, EnumMonth currentMonth, double totalDays, double beforeCanBePregnantAgainTotalDays)
-        {
-            //If the animal is pregnant or if the cycle is already started, end the repeating function
-            if (cycleTotalStartDays != -1 || isPregnant) { return false; }
-
-            //If it is not the breeding season or if the animal hasn't recovered from a previous pregnancy yet, repeat the function to check again later
-            if (!IsBreedingSeason(breedingSeason, currentMonth) || IsBreedingCooldownActive(totalDays, beforeCanBePregnantAgainTotalDays)) { return false; }
 
             return true;
         }

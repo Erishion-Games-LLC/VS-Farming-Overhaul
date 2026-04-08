@@ -58,11 +58,8 @@ namespace FarmingOverhaul.src.Systems.Breeding
         }
 
         //DONE
-        public static bool ShouldGetPregnant(bool isPregnant, Random rand, double baseFailChance, double peakFertilityStarts, double peakFertilityEnds, double totalDays)
+        public static bool ShouldGetPregnant(Random rand, double baseFailChance, double peakFertilityStarts, double peakFertilityEnds, double totalDays)
         {
-            //If already pregnant, exit
-            if (isPregnant) return false;
-
             //See if impregnation should fail based on the base impregnation fail chance and the modifiers to it.
             if (rand.NextDouble() <= CalculateImpregnationFailChance(baseFailChance, peakFertilityStarts, peakFertilityEnds, totalDays)) return false;
 
@@ -80,6 +77,13 @@ namespace FarmingOverhaul.src.Systems.Breeding
         public static bool ShouldEndEstrusCycle(double totalDays, double cycleTotalStartDays, double cycleLengthDays)
         {
             if (totalDays - cycleTotalStartDays >= cycleLengthDays) return true;
+
+            else return false;
+        }
+
+        public static bool ShouldEndCooldown(double totalDays, double endTotalDays)
+        {
+            if (totalDays >= endTotalDays) return true;
 
             else return false;
         }

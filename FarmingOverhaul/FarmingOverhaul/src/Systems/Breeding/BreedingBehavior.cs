@@ -5,7 +5,6 @@ using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 using static FarmingOverhaul.src.HelperFunctions;
 using static FarmingOverhaul.src.Systems.Breeding.BreedingLogic;
-using static FarmingOverhaul.src.Systems.Breeding.ReproductionStateManager;
 
 namespace FarmingOverhaul.src.Systems.Breeding
 {
@@ -15,7 +14,7 @@ namespace FarmingOverhaul.src.Systems.Breeding
         public override string PropertyNameKey => BreedingBehaviorKey;
         public override string PropertyName() => PropertyNameKey;
         public override string TreeKey => PropertyNameKey;
-         
+
         private AnimalState animalState;
         private WeightBehavior weightBehavior;
 
@@ -35,7 +34,8 @@ namespace FarmingOverhaul.src.Systems.Breeding
                 Logger.Error("FARMING OVERHAUL missing required behaviors for Breeding Behavior to function: " + GetSpeciesStringLowerFromEntity(entity));
                 return;
             }
-            stateManager = new ReproductionStateManager(Rand, animalState);
+
+            stateManager = new ReproductionStateManager(Rand, animalState, TreeAccessor);
             stateManager.OnBirth += GiveBirth;
 
             /*Calculate how often the reproduction function should be called based on the game speed.
@@ -45,7 +45,7 @@ namespace FarmingOverhaul.src.Systems.Breeding
             //updateReproductionTimerMs = (int)(1800 / (Calendar.SpeedOfTime * Calendar.CalendarSpeedMul)) * 1000;
             updateReproductionTimerMs = 15000;
 
-            if (ApiSide == EnumAppSide.Server) { EnableTickListeners(); }            
+            if (ApiSide == EnumAppSide.Server) { EnableTickListeners(); }
         }
 
         public override void OnEntityReceiveDamage(DamageSource damageSource, ref float damage)
@@ -87,7 +87,7 @@ namespace FarmingOverhaul.src.Systems.Breeding
         {
             updateReproductionTickListenerId = Api.Event.RegisterGameTickListener(UpdateReproduction, updateReproductionTimerMs);
         }
-        
+
         public override void DisableTickListeners()
         {
             Api.Event.UnregisterGameTickListener(updateReproductionTickListenerId);
@@ -101,12 +101,6 @@ namespace FarmingOverhaul.src.Systems.Breeding
 
             stateManager.Update(Calendar.TotalDays, Calendar.MonthName);
         }
-
-
-                  
-
-
-
 
         protected void GiveBirth(int fetusAmount)
         {
@@ -145,23 +139,6 @@ namespace FarmingOverhaul.src.Systems.Breeding
             child.WatchedAttributes.SetInt("generation", animalState.Generation + 1);
 
             World.SpawnEntity(child);
-        }
-
-        public override void GetInfoText(StringBuilder sb)
-        {
-            base.GetInfoText(sb);
-            sb.AppendLine($"Is Pregnant: {IsPregnant}");
-            if (IsPregnant)
-            {
-                sb.AppendLine($"Fetus Amount: {FetusAmount}");
-                sb.AppendLine($"Days Pregnant: {Calendar.TotalDays - PregnancyStartTotalDays} / {PregnancyLengthDays}");
-                sb.AppendLine($"Late Gestation: {LateGestation}");
-            }
-            else
-            {
-                sb.AppendLine($"In Heat: {IsInHeat(EstrusCycleTotalStartDays, EstrusCycleTimeBeforeHeatHours, EstrusCycleHeatDurationHours, Calendar.TotalDays)}");
-                sb.AppendLine($"Breeding Cooldown Active: {IsBreedingCooldownActive(Calendar.TotalDays, BeforeCanBePregnantAgainTotalDays)}");
-            }
         }
 
         ////Will be removed once animals need to mate themselves

@@ -1,21 +1,14 @@
-﻿using FarmingOverhaul.src.Behaviors;
-using Vintagestory.API.Common;
-
-namespace FarmingOverhaul.src.Systems.Breeding
+﻿namespace FarmingOverhaul.src.Systems.Breeding
 {
-    public class CooldownState : IReproductionState
+    public class CooldownState(TreeAccessor treeAccessor)
     {
-        public double CooldownEndTotalDays = -1;
+        private readonly TreeAccessor treeAccessor = treeAccessor;
+        private readonly string prefix = nameof(CooldownState);
 
-        public ReproductionState ReproductionState => ReproductionState.Cooldown;
-
-        public IReproductionState Update(double totalDays, EnumMonth month, AnimalState animalState)
+        public double CooldownEndTotalDays
         {
-            if (totalDays >= CooldownEndTotalDays)
-            {
-                return new CooldownState();
-            }
-            else return this;
+            get => treeAccessor.GetDoubleFromTree(prefix + nameof(CooldownEndTotalDays));
+            set => treeAccessor.SetDoubleInTree(prefix + nameof(CooldownEndTotalDays), value);
         }
     }
 }

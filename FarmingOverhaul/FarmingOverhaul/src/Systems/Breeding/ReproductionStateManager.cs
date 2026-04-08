@@ -1,35 +1,43 @@
 ﻿using FarmingOverhaul.src.Behaviors;
 using System;
-using System.Globalization;
+using Vintagestory;
 using Vintagestory.API.Common;
-using Vintagestory.API.MathTools;
+using Vintagestory.Common;
 using static FarmingOverhaul.src.HelperFunctions;
 using static FarmingOverhaul.src.Systems.Breeding.BreedingLogic;
 
 namespace FarmingOverhaul.src.Systems.Breeding
 {
-    public partial class ReproductionStateManager
+    public class ReproductionStateManager
     {
-        //nullable for now
-        public IReproductionState? CurrentState { get; private set; }
-        public EstrusCycleState EstrusCycle { get; } = new EstrusCycleState();
-        public PregnancyState Pregnancy { get; } = new PregnancyState();
-        public CooldownState Cooldown { get; } = new CooldownState();
+        public ReproductionState CurrentState
+        {
+            get => (ReproductionState)treeAccessor.GetIntFromTree(nameof(CurrentState));
+            private set => treeAccessor.SetIntInTree(nameof(CurrentState), (int)value);
+        }
+        private EstrusState Estrus { get; }
+        private PregnancyState Pregnancy { get; }
+        private CooldownState Cooldown { get; }
         private readonly Random rand;
         private readonly AnimalState animalState;
         private readonly AnimalConstants constants;
+        private readonly TreeAccessor treeAccessor;
 
-        public bool CompletedFirstEstrus { get; set; }
         private double totalDays;
         private EnumMonth month;
 
         public event Action<int>? OnBirth;
 
-        public ReproductionStateManager(Random random, AnimalState state, TreeAccessor tree)
+        public ReproductionStateManager(Random random, AnimalState state, TreeAccessor treeAccessor)
         {
             rand = random;
             animalState = state;
             constants = animalState.Constants;
+            this.treeAccessor = treeAccessor;
+
+            Estrus = new EstrusState(treeAccessor);
+            Pregnancy = new PregnancyState(treeAccessor);
+            Cooldown = new CooldownState(treeAccessor);
         }
 
         public void Update(double totalDays, EnumMonth month)
@@ -37,120 +45,168 @@ namespace FarmingOverhaul.src.Systems.Breeding
             this.totalDays = totalDays;
             this.month = month;
 
-            IReproductionState returnedStateClass = CurrentState.Update(totalDays, month, animalState);
-
-            if (returnedStateClass != CurrentState)
+            switch (CurrentState)
             {
-                CurrentState = returnedStateClass;
+                case ReproductionState.Idle:     UpdateIdleState();     break;
+                case ReproductionState.Estrus:   UpdateEstrusState();   break;
+                case ReproductionState.Pregnant: UpdatePregnantState(); break;
+                case ReproductionState.Cooldown: UpdateCooldownState(); break;
             }
         }
 
-
-        //    switch (CurrentState)
-        //    {
-        //        case ReproductionState.Idle:     UpdateIdleState();     break;
-        //        case ReproductionState.Estrus:   UpdateEstrusState();   break;
-        //        case ReproductionState.Pregnant: UpdatePregnantState(); break;
-        //        case ReproductionState.Cooldown: UpdateCooldownState(); break;
-        //    }
-        //}
-
         private void UpdateIdleState()
         {
-            if (IsBreedingSeason(constants.BreedingSeason, month))
+            if (!IsBreedingSeason(constants.BreedingSeason, month))
             {
-                StartEstrusCycle();
-                TransitionState(ReproductionState.Estrus);
+                return;
             }
+
+            TransitionState(ReproductionState.Estrus);
         }
 
         private void UpdateEstrusState()
         {
-            if (ShouldEndEstrusCycle(totalDays, EstrusCycle.StartTotalDays, EstrusCycle.LengthDays))
+            if (!ShouldEndEstrusCycle(totalDays, Estrus.StartTotalDays, Estrus.LengthDays))
             {
-                EndEstrusCycle();
-                TransitionState(ReproductionState.Idle);
+                return;
             }
+
+            TransitionState(ReproductionState.Idle);
         }
 
         private void UpdatePregnantState()
         {
-            if (ShouldGiveBirth(totalDays, Pregnancy.StartTotalDays, Pregnancy.LengthDays))
+            if (!ShouldGiveBirth(totalDays, Pregnancy.StartTotalDays, Pregnancy.LengthDays))
             {
-                OnBirth?.Invoke(Pregnancy.FetusAmount);
-                EndPregnancy();
-                TransitionState(ReproductionState.Cooldown);
+                return;
             }
+
+            var children = Pregnancy.FetusAmount;
+            TransitionState(ReproductionState.Cooldown);
+            OnBirth?.Invoke(children);
+
         }
 
         private void UpdateCooldownState()
         {
+            if (!ShouldEndCooldown(totalDays, Cooldown.CooldownEndTotalDays))
+            {
+                return;
+            }
 
+            TransitionState(ReproductionState.Idle);
         }
-
+        
         private void TransitionState(ReproductionState newState)
         {
+            if (!IsTransitionValid(CurrentState, newState))
+            {                
+                return;
+            }
+
+            OnExitState(CurrentState);
             CurrentState = newState;
+            OnEnterState(newState);
+        }
+
+        private void OnEnterState(ReproductionState state)
+        {
+            switch (state)
+            {
+                case ReproductionState.Idle:
+                    break;
+                case ReproductionState.Estrus:
+                    StartEstrusCycle();
+                    break;
+                case ReproductionState.Pregnant:
+                    StartPregnancy();
+                    break;
+                case ReproductionState.Cooldown:
+                    Cooldown.CooldownEndTotalDays = totalDays + SampleNormalDistributionInRange
+                        (rand, constants.MinDaysBeforeBreedAgainFemale, constants.MaxDaysBeforeBreedAgainFemale);
+                    break;
+            }
+        }
+
+        private void OnExitState(ReproductionState state)
+        {
+            switch (state)
+            {
+                case ReproductionState.Idle:
+                    break;
+                case ReproductionState.Estrus:
+                    if (!animalState.CompletedFirstEstrus)
+                    {
+                        animalState.CompletedFirstEstrus = true;
+                    }
+                    break;
+                case ReproductionState.Pregnant:
+                    break;
+                case ReproductionState.Cooldown:
+                    break;
+            }
+        }
+
+        private static bool IsTransitionValid(ReproductionState oldState, ReproductionState newState)
+        {
+            if (oldState == newState) 
+            {
+                //Need to print a message using logger, but I don't have access to it in this class
+                return false; 
+            }
+
+            return (oldState, newState) switch
+            {
+                (ReproductionState.Idle, ReproductionState.Estrus) => true,
+                (ReproductionState.Estrus, ReproductionState.Idle) => true,
+                (ReproductionState.Estrus, ReproductionState.Pregnant) => true,
+                (ReproductionState.Pregnant, ReproductionState.Cooldown) => true,
+                (ReproductionState.Cooldown, ReproductionState.Idle) => true,
+                //Need to print a message using logger, but I don't have access to it in this class
+                _ => false
+            };
         }
 
         //DONE
         //Initializes the estrus cycle for the animal, setting the duration and timing parameters for the current cycle.
-        protected void StartEstrusCycle()
+        private void StartEstrusCycle()
         {
-            EstrusCycle.LengthDays = SampleNormalDistributionInRange(rand, constants.EstrusCycleMinDays, constants.EstrusCycleMaxDays);
-            EstrusCycle.TimeBeforeHeatHours = SampleNormalDistributionInRange(rand, constants.EstrusCycleTimeBeforeHeatMinHours, constants.EstrusCycleTimeBeforeHeatMaxHours);
-            EstrusCycle.HeatDurationHours = SampleNormalDistributionInRange(rand, constants.EstrusCycleHeatDurationMinHours, constants.EstrusCycleHeatDurationMaxHours);
-            EstrusCycle.HoursUntilPeakFertility = SampleNormalDistributionInRange(rand, constants.EstrusCycleTimeBeforePeakFertilityMinHours, constants.EstrusCycleTimeBeforePeakFertilityMaxHours);
-            EstrusCycle.PeakFertilityDurationHours = SampleNormalDistributionInRange(rand, constants.EstrusCyclePeakFertilityMinHours, constants.EstrusCyclePeakFertilityMaxHours);
+            Estrus.LengthDays = SampleNormalDistributionInRange(rand, constants.EstrusCycleMinDays, constants.EstrusCycleMaxDays);
+            Estrus.TimeBeforeHeatHours = SampleNormalDistributionInRange(rand, constants.EstrusCycleTimeBeforeHeatMinHours, constants.EstrusCycleTimeBeforeHeatMaxHours);
+            Estrus.HeatDurationHours = SampleNormalDistributionInRange(rand, constants.EstrusCycleHeatDurationMinHours, constants.EstrusCycleHeatDurationMaxHours);
+            Estrus.HoursUntilPeakFertility = SampleNormalDistributionInRange(rand, constants.EstrusCycleTimeBeforePeakFertilityMinHours, constants.EstrusCycleTimeBeforePeakFertilityMaxHours);
+            Estrus.PeakFertilityDurationHours = SampleNormalDistributionInRange(rand, constants.EstrusCyclePeakFertilityMinHours, constants.EstrusCyclePeakFertilityMaxHours);
 
             //If the animal is naturally generated AND it is has not completed its first Estrus, then it could have been generated at any point in the cycle. 
-            if (animalState.Origin != "reproduction" && !CompletedFirstEstrus)
+            if (animalState.Origin != "reproduction" && !animalState.CompletedFirstEstrus)
             {
-                EstrusCycle.StartTotalDays = GenerateRandomDouble(rand, totalDays - EstrusCycle.LengthDays, totalDays);
+                Estrus.StartTotalDays = GenerateRandomDouble(rand, totalDays - Estrus.LengthDays, totalDays);
             }
 
             //If the animal is not naturally generated, then it starts the cycle at the normal time.
             else
             {
-                EstrusCycle.StartTotalDays = totalDays;
+                Estrus.StartTotalDays = totalDays;
             }
 
-            EstrusCycle.PeakStartTotalDays = EstrusCycle.StartTotalDays + (EstrusCycle.HoursUntilPeakFertility / 24);
-            EstrusCycle.PeakEndTotalDays = EstrusCycle.PeakStartTotalDays + (EstrusCycle.PeakFertilityDurationHours / 24);
+            Estrus.PeakStartTotalDays = Estrus.StartTotalDays + (Estrus.HoursUntilPeakFertility / 24);
+            Estrus.PeakEndTotalDays = Estrus.PeakStartTotalDays + (Estrus.PeakFertilityDurationHours / 24);
         }
 
-        //DONE
-        //End the animals estrus cycle. Set the variables needed during this cycle to -1.
-        protected void EndEstrusCycle()
+        //Needs to be called from the male animal when breeding occurs
+        public void TryStartPregnancy()
         {
-            CompletedFirstEstrus = true;
+            if (CurrentState != ReproductionState.Estrus) { return; }
+            if (!ShouldGetPregnant(rand, constants.ImpregnationFailChance, Estrus.PeakStartTotalDays, Estrus.PeakEndTotalDays, totalDays)) { return; }
 
-            EstrusCycleLengthDays = -1;
-            EstrusCycleTimeBeforeHeatHours = -1;
-            EstrusCycleHeatDurationHours = -1;
-            EstrusCycleHoursUntilPeakFertility = -1;
-            EstrusCyclePeakFertilityHours = -1;
-
-            EstrusCycleTotalStartDays = -1;
-            TotalDaysWhenPeakFertilityStarts = -1;
-            TotalDaysWhenPeakFertilityEnds = -1;
+            TransitionState(ReproductionState.Pregnant);
         }
 
-        protected void StartPregnancy()
+        private void StartPregnancy()
         {
             Pregnancy.FetusAmount = (int)SampleNormalDistributionInRange(rand, constants.MinFetusAmount, constants.MaxFetusAmount);
             Pregnancy.LengthDays = SampleNormalDistributionInRange(rand, constants.MinDaysPregnant, constants.MaxDaysPregnant);
             Pregnancy.StartTotalDays = totalDays;
-            TransitionState(ReproductionState.Pregnant);
-        }
-
-        //Set up the variables pertaining to the end of pregnancy, and then restart the looping function to try and begin the estrus cycle anew
-        protected void EndPregnancy()
-        {            
-            Pregnancy.LengthDays = -1;
-            Pregnancy.StartTotalDays = -1;
-            Cooldown.CooldownEndTotalDays = totalDays + SampleNormalDistributionInRange(rand, constants.MinDaysBeforeBreedAgainFemale, constants.MaxDaysBeforeBreedAgainFemale);
-            TransitionState(ReproductionState.Cooldown);
         }
     }
 }

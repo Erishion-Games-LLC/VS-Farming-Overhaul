@@ -1,4 +1,5 @@
-﻿using Vintagestory.API.Common.Entities;
+﻿using FarmingOverhaul.src.Systems;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 
 namespace FarmingOverhaul.src.Behaviors
@@ -37,6 +38,12 @@ namespace FarmingOverhaul.src.Behaviors
             get { return GetIntFromWatchedAttributes(nameof(Generation).ToLower()); }
             set { SetIntInWatchedAttributes(nameof(Generation).ToLower(), value); }
         }
+        public bool CompletedFirstEstrus
+        {
+            get => treeAccessor.GetBoolFromTree(prefix + nameof(CompletedFirstEstrus));
+            set => treeAccessor.SetBoolInTree(prefix + nameof(CompletedFirstEstrus), value);
+        }
+
         public string Origin;
 
         public override void Initialize(EntityProperties properties, JsonObject attributes)

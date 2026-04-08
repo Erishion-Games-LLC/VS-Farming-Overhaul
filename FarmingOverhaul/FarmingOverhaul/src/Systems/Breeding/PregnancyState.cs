@@ -1,18 +1,24 @@
-﻿using Vintagestory.API.Common;
-
-namespace FarmingOverhaul.src.Systems.Breeding
+﻿namespace FarmingOverhaul.src.Systems.Breeding
 {
-    public class PregnancyState : IReproductionState
+    public class PregnancyState(TreeAccessor treeAccessor)
     {
-        public double LengthDays = -1;
-        public int FetusAmount = -1;
-        public double StartTotalDays = -1;
+        private readonly TreeAccessor treeAccessor = treeAccessor;
+        private readonly string prefix = nameof(PregnancyState);
 
-        public ReproductionState ReproductionState => ReproductionState.Pregnant;
-
-        public void Update(double totalDays, EnumMonth month)
+        public double LengthDays
         {
-            throw new System.NotImplementedException();
+            get => treeAccessor.GetDoubleFromTree(prefix + nameof(LengthDays));
+            set => treeAccessor.SetDoubleInTree(prefix + nameof(LengthDays), value);
+        }
+        public int FetusAmount
+        {
+            get => treeAccessor.GetIntFromTree(prefix + nameof(FetusAmount));
+            set => treeAccessor.SetIntInTree(prefix + nameof(FetusAmount), value);
+        }
+        public double StartTotalDays
+        {
+            get => treeAccessor.GetDoubleFromTree(prefix + nameof(StartTotalDays));
+            set => treeAccessor.SetDoubleInTree(prefix + nameof(StartTotalDays), value);
         }
     }
 }

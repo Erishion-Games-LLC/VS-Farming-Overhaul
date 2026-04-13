@@ -1,5 +1,4 @@
-﻿using FarmingOverhaul.src.Systems;
-using Vintagestory.API.Common.Entities;
+﻿using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 
 namespace FarmingOverhaul.src.Behaviors
@@ -15,33 +14,33 @@ namespace FarmingOverhaul.src.Behaviors
 
         public string Species
         {
-            get { return GetStringFromTree(nameof(Species).ToLower()); }
-            set { SetStringInTree(nameof(Species).ToLower(), value); }
+            get { return TreeAccessor.GetStringFromTree(nameof(Species)); }
+            set { TreeAccessor.SetStringInTree(nameof(Species), value); }
         }
         public string Gender
         {
-            get { return GetStringFromTree(nameof(Gender).ToLower()); }
-            set { SetStringInTree(nameof(Gender).ToLower(), value); }
+            get { return TreeAccessor.GetStringFromTree(nameof(Gender)); }
+            set { TreeAccessor.SetStringInTree(nameof(Gender), value); }
         }
         public string Age
         {
-            get { return GetStringFromTree(nameof(Age).ToLower()); }
-            set { SetStringInTree(nameof(Age).ToLower(), value); }
+            get { return TreeAccessor.GetStringFromTree(nameof(Age)); }
+            set { TreeAccessor.SetStringInTree(nameof(Age), value); }
         }
         public string Type
         {
-            get { return GetStringFromTree(nameof(Type).ToLower()); }
-            set { SetStringInTree(nameof(Type).ToLower(), value); }
+            get { return TreeAccessor.GetStringFromTree(nameof(Type)); }
+            set { TreeAccessor.SetStringInTree(nameof(Type), value); }
         }
         public int Generation
         {
-            get { return GetIntFromWatchedAttributes(nameof(Generation).ToLower()); }
-            set { SetIntInWatchedAttributes(nameof(Generation).ToLower(), value); }
+            get { return TreeAccessor.GetIntFromWatchedAttributes(nameof(Generation)); }
+            set { TreeAccessor.SetIntInWatchedAttributes(nameof(Generation), value); }
         }
         public bool CompletedFirstEstrus
         {
-            get => treeAccessor.GetBoolFromTree(prefix + nameof(CompletedFirstEstrus));
-            set => treeAccessor.SetBoolInTree(prefix + nameof(CompletedFirstEstrus), value);
+            get => TreeAccessor.GetBoolFromTree(nameof(CompletedFirstEstrus));
+            set => TreeAccessor.SetBoolInTree(nameof(CompletedFirstEstrus), value);
         }
 
         public string Origin;
@@ -56,7 +55,7 @@ namespace FarmingOverhaul.src.Behaviors
             Type = entity.Properties.Variant.TryGetValue(nameof(Type).ToLower());
             Age = entity.Properties.Variant.TryGetValue(nameof(Age).ToLower());
             Gender = entity.Properties.Variant.TryGetValue(nameof(Gender).ToLower());
-            Origin = GetStringFromWatchedAttributes(nameof(Origin).ToLower());
+            Origin = TreeAccessor.GetStringFromWatchedAttributes(nameof(Origin).ToLower());
         }
 
         private AnimalConstants GetAnimalConstants(string species)

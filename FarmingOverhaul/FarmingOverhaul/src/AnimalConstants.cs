@@ -1,4 +1,5 @@
-﻿using Vintagestory.API.Common;
+﻿using System.Collections.Generic;
+using Vintagestory.API.Common;
 
 namespace FarmingOverhaul.src
 {
@@ -54,5 +55,31 @@ namespace FarmingOverhaul.src
         public double KCalPerKgMilkProduced;
         public double LowerTempRange;
         public double UpperTempRange;
+
+
+        public List<string> Validate()
+        {
+            List<string> errors = [];
+
+            ValidateRange(errors, MinDaysPregnant, MaxDaysPregnant, nameof(MinDaysPregnant));
+            ValidateRange(errors, MinDaysBeforeBreedAgainFemale, MaxDaysBeforeBreedAgainFemale, nameof(MinDaysBeforeBreedAgainFemale));
+            ValidateRange(errors, MinDaysBeforeBreedAgainMale, MaxDaysBeforeBreedAgainMale, nameof(MinDaysBeforeBreedAgainMale));
+            ValidateRange(errors, EstrusCycleMinDays, EstrusCycleMaxDays, nameof(EstrusCycleMinDays));
+            ValidateRange(errors, EstrusCycleTimeBeforeHeatMinHours, EstrusCycleTimeBeforeHeatMaxHours, nameof(EstrusCycleTimeBeforeHeatMinHours));
+            ValidateRange(errors, EstrusCycleHeatDurationMinHours, EstrusCycleHeatDurationMaxHours, nameof(EstrusCycleHeatDurationMinHours));
+            ValidateRange(errors, EstrusCycleTimeBeforePeakFertilityMinHours, EstrusCycleTimeBeforePeakFertilityMaxHours, nameof(EstrusCycleTimeBeforePeakFertilityMinHours));
+            ValidateRange(errors, EstrusCyclePeakFertilityMinHours, EstrusCyclePeakFertilityMaxHours, nameof(EstrusCyclePeakFertilityMinHours));
+            ValidateRange(errors, MinFetusAmount, MaxFetusAmount, nameof(MinFetusAmount));
+
+            return errors;
+        }
+
+        public static void ValidateRange(List<string> errors, double min, double max, string field)
+        {
+            if (min > max)
+            {
+                errors.Add($"{field} min value is greater than max value. Must be less than or equal to.");
+            }
+        }
     }
 }

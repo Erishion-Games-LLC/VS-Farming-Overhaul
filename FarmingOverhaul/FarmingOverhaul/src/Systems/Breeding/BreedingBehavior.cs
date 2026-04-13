@@ -1,5 +1,4 @@
 ﻿using FarmingOverhaul.src.Behaviors;
-using System.Text;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
@@ -18,7 +17,7 @@ namespace FarmingOverhaul.src.Systems.Breeding
         private AnimalState animalState;
         private WeightBehavior weightBehavior;
 
-        private long updateReproductionTickListenerId;
+        private long updateReproductionTickListenerId = 0;
         private int updateReproductionTimerMs;
         private ReproductionStateManager stateManager;
 
@@ -35,7 +34,7 @@ namespace FarmingOverhaul.src.Systems.Breeding
                 return;
             }
 
-            stateManager = new ReproductionStateManager(Rand, animalState, TreeAccessor);
+            stateManager = new ReproductionStateManager(Rand, animalState, TreeAccessor, Logger);
             stateManager.OnBirth += GiveBirth;
 
             /*Calculate how often the reproduction function should be called based on the game speed.
@@ -85,6 +84,8 @@ namespace FarmingOverhaul.src.Systems.Breeding
         */
         public override void EnableTickListeners()
         {
+            if (updateReproductionTickListenerId != 0) return;
+
             updateReproductionTickListenerId = Api.Event.RegisterGameTickListener(UpdateReproduction, updateReproductionTimerMs);
         }
 
@@ -161,15 +162,6 @@ namespace FarmingOverhaul.src.Systems.Breeding
 
         //    //No male matching species was found
         //    return false;
-        //}
-
-        //private bool InLateGestation(Entity animal)
-        //{
-        //    if (DaysPregnant / pregnancyLength < Constants.LateGestationPercent)
-        //    {
-        //        return false;
-        //    }
-        //    else return true;
-        //}      
+        //}     
     }
 }

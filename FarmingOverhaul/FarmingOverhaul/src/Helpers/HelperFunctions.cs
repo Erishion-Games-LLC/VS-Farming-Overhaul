@@ -95,5 +95,10 @@ namespace FarmingOverhaul.src
         {
             return entity.Code.Path.Split('-')[0].ToLower();
         }
+
+        public static bool HasTimeFinished(double totalDays, double start, double length)
+        {
+            return totalDays >= start + length;
+        }
     }
 }

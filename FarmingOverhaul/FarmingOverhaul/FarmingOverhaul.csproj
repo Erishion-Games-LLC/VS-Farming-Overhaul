@@ -66,8 +66,4 @@
   </Content>
 </ItemGroup>
 
-<ItemGroup>
-  <Folder Include="src\Patches\HarmonyPatches\Behaviors\" />
-</ItemGroup>
-
 </Project>

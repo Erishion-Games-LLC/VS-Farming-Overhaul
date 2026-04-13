@@ -12,11 +12,11 @@ namespace FarmingOverhaul.src
 {
     public class FarmingOverhaulModSystem : ModSystem
     {
-        private Harmony? harmony;
-        
+        public static string ModID;
+        private Harmony? harmony;        
         public override void Start(ICoreAPI api)
         {
-            string ModID = Mod.Info.ModID;
+            ModID = Mod.Info.ModID;
             api.RegisterBlockClass(ModID + ".trampoline", typeof(BlockTrampoline));
             api.RegisterItemClass(ModID + ".thornsblade", typeof(ItemThornsBlade));
             api.RegisterEntityBehaviorClass(BreedingBehavior.BreedingBehaviorKey, typeof(BreedingBehavior));

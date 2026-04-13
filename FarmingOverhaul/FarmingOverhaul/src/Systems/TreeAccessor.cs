@@ -18,11 +18,13 @@ namespace FarmingOverhaul.src.Systems
 
         protected void MarkPathDirty() => entity.WatchedAttributes.MarkPathDirty(treeKey);
 
-        public int GetIntFromWatchedAttributes(string key) => entity.WatchedAttributes.GetInt(key);
-        public double GetDoubleFromWatchedAttributes(string key) => entity.WatchedAttributes.GetDouble(key);
+        public int GetIntFromWatchedAttributes(string key) => entity.WatchedAttributes.GetInt(key.ToLower());
+        public double GetDoubleFromWatchedAttributes(string key) => entity.WatchedAttributes.GetDouble(key.ToLower());
+        public string GetStringFromWatchedAttributes(string key) => entity.WatchedAttributes.GetString(key.ToLower());
 
-        public void SetIntInWatchedAttributes(string key, int value) => entity.WatchedAttributes.SetInt(key, value);
-        public void SetDoubleInWatchedAttributes(string key, int value) => entity.WatchedAttributes.SetDouble(key, value);
+        public void SetIntInWatchedAttributes(string key, int value) => entity.WatchedAttributes.SetInt(key.ToLower(), value);
+        public void SetDoubleInWatchedAttributes(string key, int value) => entity.WatchedAttributes.SetDouble(key.ToLower(), value);
+        public void SetStringInWatchedAttributes(string key, string value) => entity.WatchedAttributes.SetString(key.ToLower(), value);
 
         public int GetIntFromTree(string key) => tree.GetInt(key.ToLower());
         public float GetFloatFromTree(string key) => tree.GetFloat(key.ToLower());

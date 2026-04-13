@@ -5,6 +5,23 @@ namespace FarmingOverhaul.src.Config
 {
     public class FarmingOverhaulServerConfig
     {
+        public List<string> Validate()
+        {
+            List<string> errors = [];
+
+            foreach (var species in Species)
+            {
+                List<string> speciesErrors = species.Value.Validate();
+
+                foreach (var error in speciesErrors)
+                {
+                    errors.Add($"{species} error: {error}");
+                }
+            }
+
+            return errors;
+        }
+
         public Dictionary<string, AnimalConstants> Species = new()
         {
             //["hare"] = new AnimalConstants 

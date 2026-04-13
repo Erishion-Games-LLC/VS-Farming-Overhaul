@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vintagestory.API.Common;
 
 namespace FarmingOverhaul.src.Config
@@ -13,6 +14,7 @@ namespace FarmingOverhaul.src.Config
             if (api.Side == EnumAppSide.Server)
             {
                 ServerConfig = LoadConfig<FarmingOverhaulServerConfig>(api);
+                ServerConfig.Validate();
             }
             else if (api.Side == EnumAppSide.Client)
             {
@@ -27,15 +29,35 @@ namespace FarmingOverhaul.src.Config
         private static T LoadConfig<T>(ICoreAPI api) where T : class, new()
         {
             string fileName = typeof(T).Name + ".json";
-
+            List<string> errors = [];
             try
             {
                 T config = api.LoadModConfig<T>(fileName);
+
                 if (config == null)
                 {
                     api.Logger.Warning(fileName + " is null. Loading default values.");
                     config = new T();
                 }
+
+                if (config is FarmingOverhaulServerConfig serverConfig)
+                {
+                    errors = serverConfig.Validate();
+
+                    if (errors.Count > 0)
+                    {
+                        api.Logger.Error($"Config {fileName} had errors: ");
+                        foreach (string error in errors)
+                        {
+                            api.Logger.Error(error);
+                        }
+
+                        api.Logger.Error($"Replacing invalid {fileName} with default values.");
+
+                        config = new T();
+                    }
+                }
+
                 api.StoreModConfig(config, fileName);
                 return config;
             }

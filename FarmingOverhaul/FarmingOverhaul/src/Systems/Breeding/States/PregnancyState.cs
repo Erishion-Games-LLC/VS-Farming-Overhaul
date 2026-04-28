@@ -1,20 +1,20 @@
-﻿using FarmingOverhaul.src.Behaviors;
+﻿using FarmingOverhaul.src.Constants.AnimalConstants;
+using FarmingOverhaul.src.Helpers.StateMachine;
+using FarmingOverhaul.src.Systems.Breeding.Enums;
 using System;
 using Vintagestory.API.Common;
 using static FarmingOverhaul.src.HelperFunctions;
 
 namespace FarmingOverhaul.src.Systems.Breeding.States
 {
-    public class PregnancyState(TreeAccessor treeAccessor, AnimalState animalState, Random random) : IReproState
+    public class PregnancyState(TreeAccessor treeAccessor, PregnancyConstants pregnancy, Random random, int daysPerMonth) : IState<FemaleReproductionState>
     {
         private readonly TreeAccessor treeAccessor = treeAccessor;
-        private readonly AnimalState animalState = animalState;
         private readonly Random rand = random;
 
-        private readonly AnimalConstants constants = animalState.Constants;
         private readonly string prefix = nameof(PregnancyState);
 
-        public event Action<int>? OnBirth;
+        public event Action<int, double>? OnBirth;
 
         public double LengthDays
         {
@@ -32,32 +32,31 @@ namespace FarmingOverhaul.src.Systems.Breeding.States
             set => treeAccessor.SetDoubleInTree(prefix + nameof(StartTotalDays), value);
         }
 
-        public void EnterState(double totalDays)
+        public FemaleReproductionState State => FemaleReproductionState.Pregnant;
+
+        public void EnterState(double transitionDays, EnumMonth transitionMonth)
         {
-            FetusAmount = (int)SampleNormalDistributionInRange(rand, constants.MinFetusAmount, constants.MaxFetusAmount);
-            LengthDays = SampleNormalDistributionInRange(rand, constants.MinDaysPregnant, constants.MaxDaysPregnant);
-            StartTotalDays = totalDays;
+            FetusAmount = (int)SampleNormalDistributionInRange(rand, pregnancy.MinFetusAmount, pregnancy.MaxFetusAmount);
+            LengthDays = SampleNormalDistributionInRange(rand, pregnancy.MinDaysPregnant, pregnancy.MaxDaysPregnant);
+            StartTotalDays = transitionDays;
         }
 
         public void ExitState()
         {
         }
 
-        public ReproductionState UpdateState(double totalDays, EnumMonth month)
+        public (FemaleReproductionState nextState, double transitionDays, EnumMonth transitionMonth) UpdateState(double totalDays, EnumMonth month)
         {
             //Check if the pregnancy duration has completed, and if so, trigger the birth event with the appropriate number of children and transition to cooldown.
-            if (ShouldGiveBirth(totalDays, StartTotalDays, LengthDays))
+            if (HasTimeFinished(totalDays, StartTotalDays, LengthDays))
             {
                 var children = FetusAmount;
-                OnBirth?.Invoke(children);
-                return ReproductionState.Cooldown;
-            }
-            else return ReproductionState.Pregnant;
-        }
+                OnBirth?.Invoke(children, totalDays);
+                double transitionDays = StartTotalDays + LengthDays;
 
-        public static bool ShouldGiveBirth(double totalDays, double pregnancyStartTotalDays, double pregnancyLengthDays)
-        {
-            return HasTimeFinished(totalDays, pregnancyStartTotalDays, pregnancyLengthDays);
+                return (FemaleReproductionState.Cooldown, transitionDays, GetMonthFromDay(transitionDays, daysPerMonth));
+            }
+            else return (FemaleReproductionState.Pregnant, totalDays, month);
         }
     }
 }

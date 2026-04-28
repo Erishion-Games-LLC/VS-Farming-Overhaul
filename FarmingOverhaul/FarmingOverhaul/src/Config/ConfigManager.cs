@@ -4,68 +4,74 @@ using Vintagestory.API.Common;
 
 namespace FarmingOverhaul.src.Config
 {
-    public class ConfigManager
+    public static class ConfigManager
     {
-        public FarmingOverhaulServerConfig? ServerConfig { get; private set; }
-        public FarmingOverhaulClientConfig? ClientConfig { get; private set; }
+        public static FarmingOverhaulServerConfig ServerConfig { get; private set; } = null!;
+        public static FarmingOverhaulClientConfig ClientConfig { get; private set; } = null!;
 
-        public void Start(ICoreAPI api)
+
+        public static void StartServer(ICoreAPI api)
         {
-            if (api.Side == EnumAppSide.Server)
-            {
-                ServerConfig = LoadConfig<FarmingOverhaulServerConfig>(api);
-                ServerConfig.Validate();
-            }
-            else if (api.Side == EnumAppSide.Client)
-            {
-                ClientConfig = LoadConfig<FarmingOverhaulClientConfig>(api);
-            }
-            else
-            {
-                api.Logger.Error("Farming Overhaul Config Manager started on api side other than client or server");
-            }
+            ServerConfig = LoadConfig<FarmingOverhaulServerConfig>(api);
         }
-        
-        private static T LoadConfig<T>(ICoreAPI api) where T : class, new()
+
+        public static void StartClient(ICoreAPI api)
+        {
+            ClientConfig = LoadConfig<FarmingOverhaulClientConfig>(api);
+        }
+
+        private static T LoadConfig<T>(ICoreAPI api)
+            where T : class, IValidatableConfig, new()
         {
             string fileName = typeof(T).Name + ".json";
-            List<string> errors = [];
+
+            T? rawConfig = LoadRawConfig<T>(api, fileName);
+            T validatedConfig = ValidateConfig(rawConfig, api, fileName);
+            api.StoreModConfig(validatedConfig, fileName);
+
+            return validatedConfig;
+        }
+
+        private static T? LoadRawConfig<T>(ICoreAPI api, string fileName) where T : class
+        {
             try
             {
                 T config = api.LoadModConfig<T>(fileName);
-
-                if (config == null)
-                {
-                    api.Logger.Warning(fileName + " is null. Loading default values.");
-                    config = new T();
-                }
-
-                if (config is FarmingOverhaulServerConfig serverConfig)
-                {
-                    errors = serverConfig.Validate();
-
-                    if (errors.Count > 0)
-                    {
-                        api.Logger.Error($"Config {fileName} had errors: ");
-                        foreach (string error in errors)
-                        {
-                            api.Logger.Error(error);
-                        }
-
-                        api.Logger.Error($"Replacing invalid {fileName} with default values.");
-
-                        config = new T();
-                    }
-                }
-
-                api.StoreModConfig(config, fileName);
                 return config;
             }
             catch (Exception e)
             {
-                api.Logger.Warning(e + ": Could not load " + fileName + ". Loading default values.");
-                return new T();
+                api.Logger.Warning($"Could not load {fileName} due to {e}.");
+                return null;
             }
+        }
+
+        private static T ValidateConfig<T>(T? config, ICoreAPI api, string fileName)
+            where T : class, IValidatableConfig ,new()
+        {
+            if (config == null)
+            {
+                api.Logger.Error($"{fileName} is null. Loading default values.");
+                config = new T();
+                return config;
+            }
+
+            List<string> errors = config.Validate();
+
+            if (errors.Count > 0)
+            {
+                api.Logger.Error($"Config {fileName} had errors: ");
+                foreach (string error in errors)
+                {
+                    api.Logger.Error(error);
+                }
+
+                api.Logger.Error($"Replacing invalid {fileName} with default values.");
+
+                config = new T();
+            }
+
+            return config;
         }
     }
 }

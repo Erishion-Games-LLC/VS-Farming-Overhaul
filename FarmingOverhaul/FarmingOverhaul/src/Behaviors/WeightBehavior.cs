@@ -1,4 +1,5 @@
-﻿using Vintagestory.API.Common.Entities;
+﻿using FarmingOverhaul.src.Constants.AnimalConstants;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 
 namespace FarmingOverhaul.src.Behaviors
@@ -6,9 +7,7 @@ namespace FarmingOverhaul.src.Behaviors
     public class WeightBehavior(Entity entity) : BaseBehavior(entity)
     {
         public const string WeightBehaviorKey = "foweight";
-        public override string PropertyNameKey => WeightBehaviorKey;
-        public override string PropertyName() => PropertyNameKey;
-        public override string TreeKey => PropertyNameKey;
+        protected override string PropertyNameKey => WeightBehaviorKey;
 
         private AnimalState animalState;
         private AnimalConstants constants;

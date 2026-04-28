@@ -1,4 +1,6 @@
-﻿using Vintagestory.API.Common.Entities;
+﻿using FarmingOverhaul.src.Constants.AnimalConstants;
+using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 
 namespace FarmingOverhaul.src.Behaviors
@@ -6,9 +8,7 @@ namespace FarmingOverhaul.src.Behaviors
     public class AnimalState(Entity entity) : BaseBehavior(entity)
     {
         public const string AnimalStateKey = "foanimalstate";
-        public override string PropertyNameKey => AnimalStateKey;
-        public override string PropertyName() => PropertyNameKey;
-        public override string TreeKey => PropertyNameKey;
+        protected override string PropertyNameKey => AnimalStateKey;
 
         public AnimalConstants Constants { get; private set; }
 
@@ -42,6 +42,11 @@ namespace FarmingOverhaul.src.Behaviors
             get => TreeAccessor.GetBoolFromTree(nameof(CompletedFirstEstrus));
             set => TreeAccessor.SetBoolInTree(nameof(CompletedFirstEstrus), value);
         }
+        public double BirthTotalDays
+        {
+            get => TreeAccessor.GetDoubleFromTree(nameof(BirthTotalDays));
+            set => TreeAccessor.SetDoubleInTree(nameof(BirthTotalDays), value);
+        }
 
         public string Origin;
 
@@ -56,6 +61,13 @@ namespace FarmingOverhaul.src.Behaviors
             Age = entity.Properties.Variant.TryGetValue(nameof(Age).ToLower());
             Gender = entity.Properties.Variant.TryGetValue(nameof(Gender).ToLower());
             Origin = TreeAccessor.GetStringFromWatchedAttributes(nameof(Origin).ToLower());
+        }
+
+        public override void OnEntityReceiveDamage(DamageSource damageSource, ref float damage)
+        {
+            base.OnEntityReceiveDamage(damageSource, ref damage);
+            //var growTree = (ITreeAttribute)entity.WatchedAttributes.GetTreeAttribute("grow");
+            //Logger.Error($"{growTree.GetDouble("timeSpawned")}");
         }
 
         private AnimalConstants GetAnimalConstants(string species)

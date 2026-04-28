@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 
 namespace FarmingOverhaul.src
@@ -99,6 +101,62 @@ namespace FarmingOverhaul.src
         public static bool HasTimeFinished(double totalDays, double start, double length)
         {
             return totalDays >= start + length;
+        }
+
+        public static void AddIfNotNull<T>(List<T> list, T? item)
+        {
+            if (item != null) list.Add(item);
+        }
+
+        public static string? ValidateRange(double min, double max, string field)
+        {
+            if (min > max)
+            {
+                return ($"{field} min value is greater than max value. Must be less than or equal to.");
+            }
+            else return null;
+        }
+
+        public static T GetBehavior<T>(Entity entity, string caller) where T : EntityBehavior
+        {
+            var behavior = entity.GetBehavior<T>();
+            if (behavior == null)
+            {
+                throw new InvalidOperationException($"{caller} requires {typeof(T).Name} but it is missing on {entity.Code}");
+            }
+            return behavior;
+        }
+
+
+        //Calculate the month based on the total days and the number of days per month. This assumes that the first day of the year is day 0 and corresponds to the first month
+        public static EnumMonth GetMonthFromDay(double day, int daysPerMonth)
+        {
+            int DaysPerYear = daysPerMonth * 12;
+
+            //Normalize the day to a value between 0 and DaysPerYear - 1
+            int normalizedDay = (int)day % DaysPerYear;
+
+            // Calculate the month index by dividing the normalized day by the number of days per month
+            int monthIndex = (normalizedDay / daysPerMonth);
+            return (EnumMonth)monthIndex;
+        }
+
+        public static int GetYearsCompletedFromDay(double startDay, int daysPerYear)
+        {
+            return (int)(startDay - (startDay % daysPerYear));
+        }
+
+        public static Dictionary<EnumMonth, int> CreateMonthStartDayDict(int daysPerMonth)
+        {
+            Dictionary<EnumMonth, int> monthStartDayDict = [];
+            int startingTotalDays = 0;
+            int totalDays = startingTotalDays;
+            foreach (EnumMonth month in Enum.GetValues<EnumMonth>())
+            {
+                monthStartDayDict.Add(month, totalDays);
+                totalDays += daysPerMonth;
+            }
+            return monthStartDayDict;
         }
     }
 }

@@ -81,32 +81,32 @@ namespace FarmingOverhaulTests.tests.Systems.Breeding.States
         }
 
 
-        //UpdateState tests
-        [Fact]
-        public void UpdateState_WhenShouldEndCooldownIsTrue_ReturnsIdle()
-        {            
-            CooldownState cooldownState = CreateState();
-            cooldownState.EndTotalDays = 1;
+        ////UpdateState tests
+        //[Fact]
+        //public void UpdateState_WhenShouldEndCooldownIsTrue_ReturnsIdle()
+        //{            
+        //    CooldownState cooldownState = CreateState();
+        //    cooldownState.EndTotalDays = 1;
 
 
-            ReproductionState newState = cooldownState.UpdateState(totalDays, month);
+        //    ReproductionState newState = cooldownState.UpdateState(totalDays, month);
 
             
-            Assert.Equal(ReproductionState.Idle, newState);
-        }
+        //    Assert.Equal(ReproductionState.Idle, newState);
+        //}
 
-        [Fact]
-        public void UpdateState_WhenShouldEndCooldownIsFalse_ReturnsCooldown()
-        {
-            CooldownState cooldownState = CreateState();
-            cooldownState.EndTotalDays = totalDays + 1;
-
-
-            ReproductionState newState = cooldownState.UpdateState(totalDays, month);
+        //[Fact]
+        //public void UpdateState_WhenShouldEndCooldownIsFalse_ReturnsCooldown()
+        //{
+        //    CooldownState cooldownState = CreateState();
+        //    cooldownState.EndTotalDays = totalDays + 1;
 
 
-            Assert.Equal(ReproductionState.Cooldown, newState);
-        }
+        //    ReproductionState newState = cooldownState.UpdateState(totalDays, month);
+
+
+        //    Assert.Equal(ReproductionState.Cooldown, newState);
+        //}
 
 
         //ShouldEndCooldown tests

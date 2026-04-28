@@ -1,72 +1,43 @@
 ﻿using FarmingOverhaul.src.Behaviors;
-using FarmingOverhaul.src.Blocks;
-using FarmingOverhaul.src.Items;
-using FarmingOverhaul.src.Systems.Breeding;
-using HarmonyLib;
+using FarmingOverhaul.src.Config;
+using FarmingOverhaul.src.Systems.Breeding.Behaviors;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Server;
 
 namespace FarmingOverhaul.src
 {
     public class FarmingOverhaulModSystem : ModSystem
     {
-        public static string ModID;
-        private Harmony? harmony;        
+        public static string? ModID;    
+
         public override void Start(ICoreAPI api)
         {
             ModID = Mod.Info.ModID;
-            api.RegisterBlockClass(ModID + ".trampoline", typeof(BlockTrampoline));
-            api.RegisterItemClass(ModID + ".thornsblade", typeof(ItemThornsBlade));
-            api.RegisterEntityBehaviorClass(BreedingBehavior.BreedingBehaviorKey, typeof(BreedingBehavior));
-            api.RegisterEntityBehaviorClass(AnimalState.AnimalStateKey, typeof(AnimalState));
-            api.RegisterEntityBehaviorClass(BaseBehavior.BaseBehaviorKey, typeof(BaseBehavior));
-            api.RegisterEntityBehaviorClass(LactationBehavior.LactationKey, typeof(LactationBehavior));
-            api.RegisterEntityBehaviorClass(WeightBehavior.WeightBehaviorKey, typeof(WeightBehavior));
-
-            Interfacer.Initialize(api);
+            RegisterClasses(api);
         }
 
         public override void StartServerSide(ICoreServerAPI api)
         {
-            Interfacer.SystemManager.StartServer(api);
-
-            api.Event.OnEntityLoaded += OnEntityLoadedHandler;
-
-            //InitializeHarmony();
+            ConfigManager.StartServer(api);
         }
 
         public override void StartClientSide(ICoreClientAPI api)
         {
-            Interfacer.SystemManager.StartClient(api);
+            ConfigManager.StartClient(api);
         }
 
-        //Currently not using harmony, but may in the future.
-        private void InitializeHarmony()
+        private static void RegisterClasses(ICoreAPI api)
         {
-            if (harmony != null)
-            {
-                return;
-            }
+            //Register Behaviors
+            api.RegisterEntityBehaviorClass(BaseBehavior.BaseBehaviorKey, typeof(BaseBehavior));
+            api.RegisterEntityBehaviorClass(BaseBreedingBehavior.BaseBreedingBehaviorKey, typeof(BaseBreedingBehavior));
+            api.RegisterEntityBehaviorClass(AnimalState.AnimalStateKey, typeof(AnimalState));
+            api.RegisterEntityBehaviorClass(WeightBehavior.WeightBehaviorKey, typeof(WeightBehavior));
 
-            harmony = new(Mod.Info.ModID);
-            harmony.PatchAll();
-        }
-
-        private void OnEntityLoadedHandler(Entity entity)
-        {
-            //string species = HelperFunctions.GetSpeciesStringLowerFromEntity(entity);
-
-            ////if entity should have the custom breeding behavior but doesn't for some reason, add it.
-            //if (Interfacer.SystemManager.ConfigManager.ServerConfig.Species.ContainsKey(species))
-            //{
-            //    if (!entity.HasBehavior(BreedingBehavior.BreedingBehaviorKey))
-            //    {
-            //        entity.Api.Logger.Notification("Didn't have breeding behavior but should: " + species);
-            //        entity.AddBehavior(new BreedingBehavior(entity));
-            //    }
-            //}
+            api.RegisterEntityBehaviorClass(FemaleBreedingBehavior.FemaleBreedingBehaviorKey, typeof(FemaleBreedingBehavior));
+            //api.RegisterEntityBehaviorClass(MaleBreedingBehavior.MaleBreedingBehaviorKey, typeof(MaleBreedingBehavior));
+            api.RegisterEntityBehaviorClass(LactationBehavior.LactationKey, typeof(LactationBehavior));
         }
     }
 }

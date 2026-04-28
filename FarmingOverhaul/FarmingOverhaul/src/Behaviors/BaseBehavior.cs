@@ -10,21 +10,22 @@ namespace FarmingOverhaul.src.Behaviors
     public abstract class BaseBehavior(Entity entity) : EntityBehavior(entity)
     {
         public const string BaseBehaviorKey = "fobasebehavior";
-        public abstract string PropertyNameKey { get; }
+        protected abstract string PropertyNameKey { get; }
         protected ITreeAttribute Tree;
-        public abstract string TreeKey { get; }
+        public override string PropertyName() => PropertyNameKey;
+        protected virtual string TreeKey => PropertyNameKey;
 
-        protected TreeAccessor TreeAccessor => new(Tree, entity, TreeKey);
+        protected TreeAccessor TreeAccessor;
 
-        public EntityProperties Properties { get; private set; }
-        public JsonObject Attributes { get; private set; }
-        public FarmingOverhaulServerConfig Config;
-        public ICoreAPI Api;
-        public ILogger Logger;
-        public IWorldAccessor World;
-        public IGameCalendar Calendar;
-        public Random Rand;
-        public EnumAppSide ApiSide;
+        protected EntityProperties Properties { get; private set; }
+        protected JsonObject Attributes { get; private set; }
+        protected FarmingOverhaulServerConfig Config;
+        protected ICoreAPI Api;
+        protected ILogger Logger;
+        protected IWorldAccessor World;
+        protected IGameCalendar Calendar;
+        protected Random Rand;
+        protected EnumAppSide ApiSide;
 
         public override void Initialize(EntityProperties properties, JsonObject attributes)
         {
@@ -35,19 +36,17 @@ namespace FarmingOverhaul.src.Behaviors
             Calendar = World.Calendar;
             Rand = World.Rand;
             ApiSide = Api.Side;
-           
-            Tree = entity.WatchedAttributes.GetTreeAttribute(TreeKey);
+            Config = ConfigManager.ServerConfig;
 
-            Tree ??= new TreeAttribute();
-            if (ApiSide == EnumAppSide.Server) { entity.WatchedAttributes.SetAttribute(TreeKey, Tree); }
 
-            if (Interfacer.SystemManager.ConfigManager.ServerConfig == null)
-            {
-                Logger.Error("FarmingOverhaulServerConfig is null. Exiting Initialize on: " + entity.GetName());
-                return;
+            Tree = entity.WatchedAttributes.GetTreeAttribute(TreeKey) ?? new TreeAttribute();
+            TreeAccessor = new(Tree, entity, TreeKey);
+
+            if (ApiSide == EnumAppSide.Server) 
+            { 
+                entity.WatchedAttributes.SetAttribute(TreeKey, Tree);
+                EnableTickListeners();
             }
-
-            Config = Interfacer.SystemManager.ConfigManager.ServerConfig;
         }
 
         public virtual void EnableTickListeners()
@@ -56,6 +55,26 @@ namespace FarmingOverhaul.src.Behaviors
 
         public virtual void DisableTickListeners()
         {
+        }
+
+        public virtual void SetRequiredBehaviors()
+        {
+        }
+
+        public override void OnEntityDeath(DamageSource damageSourceForDeath)
+        {
+            base.OnEntityDeath(damageSourceForDeath);
+            DieOrDespawn();
+        }
+        public override void OnEntityDespawn(EntityDespawnData despawn)
+        {
+            base.OnEntityDespawn(despawn);
+            DieOrDespawn();
+        }
+
+        protected void DieOrDespawn()
+        {
+            DisableTickListeners();
         }
     }
 }

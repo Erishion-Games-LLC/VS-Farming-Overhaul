@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FarmingOverhaul.src.Helpers.Validation;
+using System.Collections.Generic;
 
 namespace FarmingOverhaul.src.Config
 {
@@ -6,7 +7,7 @@ namespace FarmingOverhaul.src.Config
     {
         public int testClient1 = 0;
 
-        public List<string> Validate()
+        public List<ValidationResult> Validate()
         {
             return [];
         }

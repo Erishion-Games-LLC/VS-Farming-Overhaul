@@ -1,4 +1,5 @@
-﻿using FarmingOverhaul.src.Constants.AnimalConstants;
+﻿using FarmingOverhaul.src.Constants.AnimalsConstants;
+using FarmingOverhaul.src.Helpers.Validation;
 using System.Collections.Generic;
 using Vintagestory.API.Common;
 
@@ -6,17 +7,29 @@ namespace FarmingOverhaul.src.Config
 {
     public class FarmingOverhaulServerConfig : IValidatableConfig
     {
-        public List<string> Validate()
+        public const string HareKey = "hare";
+        public const string ChickenKey = "chicken";
+        public const string PigKey = "pig";
+        public const string SheepKey = "sheep";
+        public const string GoatKey = "goat";
+
+        public List<ValidationResult> Validate()
         {
-            List<string> errors = [];
+            List<ValidationResult> errors = [];
 
             foreach (var species in Species)
             {
-                List<string> speciesErrors = species.Value.Validate();
+                if (species.Value == null)
+                {
+                    errors.Add(new ValidationResult(ValidationErrorType.NullClass, $"{species.Key}"));
+                    continue;
+                }
+
+                List<ValidationResult> speciesErrors = species.Value.Validate();
 
                 foreach (var error in speciesErrors)
                 {
-                    errors.Add($"{species} error: {error}");
+                    errors.Add(new ValidationResult(error.Error, $"{species.Key}.{error.ValidatedItem}"));
                 }
             }
 
@@ -31,21 +44,21 @@ namespace FarmingOverhaul.src.Config
 
             //["pig"] = new AnimalConstants
 
-            ["sheep"] = new AnimalConstants
+            [SheepKey] = new AnimalConstants
             {
                 Estrus = new EstrusConstants
                 {
                     BreedingSeason = [EnumMonth.January, EnumMonth.February],
                     EstrusCycleMinDays = 0.0,
                     EstrusCycleMaxDays = 0.0,
-                    TimeBeforeHeatMinHours = 0.0,
-                    TimeBeforeHeatMaxHours = 0.0,
-                    HeatDurationMinHours = 0.0,
-                    HeatDurationMaxHours = 0.0,
-                    TimeBeforePeakFertilityMinHours = 0.0,
-                    TimeBeforePeakFertilityMaxHours = 0.0,
-                    PeakFertilityMinHours = 0.0,
-                    PeakFertilityMaxHours = 0.0,
+                    TimeBeforeHeatMinDays = 0.0,
+                    TimeBeforeHeatMaxDays = 0.0,
+                    HeatDurationMinDays = 0.0,
+                    HeatDurationMaxDays = 0.0,
+                    TimeBeforePeakFertilityMinDays = 0.0,
+                    TimeBeforePeakFertilityMaxDays = 0.0,
+                    PeakFertilityMinDays = 0.0,
+                    PeakFertilityMaxDays = 0.0,
                 },
                 Pregnancy = new PregnancyConstants
                 {

@@ -1,8 +1,9 @@
 ﻿using FarmingOverhaul.src.Behaviors;
+using FarmingOverhaul.src.Systems.Weight.Behaviors;
 using System;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
-using static FarmingOverhaul.src.HelperFunctions;
+using static FarmingOverhaul.src.Helpers.HelperFunctions;
 
 namespace FarmingOverhaul.src.Systems.Breeding.Behaviors
 {

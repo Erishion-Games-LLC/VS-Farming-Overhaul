@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using FarmingOverhaul.src.Helpers.Validation;
+using System.Collections.Generic;
 
 namespace FarmingOverhaul.src.Constants
 {
     public interface IConstants
     {
-        public List<string> ValidateVariableRange();
+        public List<ValidationResult> ValidateVariableRange();
     }
 }

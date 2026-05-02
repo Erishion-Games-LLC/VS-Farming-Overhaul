@@ -3,18 +3,11 @@ using Vintagestory.API.Datastructures;
 
 namespace FarmingOverhaul.src.Systems
 {
-    public class TreeAccessor
+    public class TreeAccessor(ITreeAttribute tree, Entity entity, string treeKey)
     {
-        private readonly ITreeAttribute tree;
-        private readonly Entity entity;
-        private readonly string treeKey;
-
-        public TreeAccessor(ITreeAttribute tree, Entity entity, string treeKey)
-        {
-            this.tree = tree;
-            this.entity = entity;
-            this.treeKey = treeKey;
-        }
+        private readonly ITreeAttribute tree = tree;
+        private readonly Entity entity = entity;
+        private readonly string treeKey = treeKey;
 
         protected void MarkPathDirty() => entity.WatchedAttributes.MarkPathDirty(treeKey);
 
@@ -25,6 +18,11 @@ namespace FarmingOverhaul.src.Systems
         public void SetIntInWatchedAttributes(string key, int value) => entity.WatchedAttributes.SetInt(key.ToLower(), value);
         public void SetDoubleInWatchedAttributes(string key, int value) => entity.WatchedAttributes.SetDouble(key.ToLower(), value);
         public void SetStringInWatchedAttributes(string key, string value) => entity.WatchedAttributes.SetString(key.ToLower(), value);
+
+        public string GetStringFromAttributes(string key) => entity.Attributes.GetString(key);
+
+        public void SetStringInAttributes(string key, string value) => entity.Attributes.SetString(key.ToLower(), value);
+
 
         public int GetIntFromTree(string key) => tree.GetInt(key.ToLower());
         public float GetFloatFromTree(string key) => tree.GetFloat(key.ToLower());

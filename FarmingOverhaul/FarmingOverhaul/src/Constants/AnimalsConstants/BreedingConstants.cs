@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using static FarmingOverhaul.src.HelperFunctions;
+﻿using FarmingOverhaul.src.Helpers.Validation;
+using System.Collections.Generic;
+using static FarmingOverhaul.src.Helpers.HelperFunctions;
 
-namespace FarmingOverhaul.src.Constants.AnimalConstants
+namespace FarmingOverhaul.src.Constants.AnimalsConstants
 {
     public class BreedingConstants : IConstants
     {
@@ -17,9 +18,9 @@ namespace FarmingOverhaul.src.Constants.AnimalConstants
         //What radius a male animal needs to be in to trigger the "Ram Effect"
         public float RadiusMaleForHeat;
 
-        public List<string> ValidateVariableRange()
+        public List<ValidationResult> ValidateVariableRange()
         {
-            List<string> errors = [];
+            List<ValidationResult> errors = [];
 
             AddIfNotNull(errors, ValidateRange(MinDaysBeforeBreedAgainFemale, MaxDaysBeforeBreedAgainFemale, nameof(MinDaysBeforeBreedAgainFemale)));
             AddIfNotNull(errors, ValidateRange(MinDaysBeforeBreedAgainMale, MaxDaysBeforeBreedAgainMale, nameof(MinDaysBeforeBreedAgainMale)));

@@ -49,18 +49,6 @@ namespace FarmingOverhaul.src.Systems.Breeding.Behaviors
         {
             base.GetInfoText(infotext);
             infotext.AppendLine($"Reproduction State: {stateManager.CurrentState}");
-
-        }
-
-        //DONE
-        /*If the current amount of time passed is inbetween the min and max amount of time passed for this heat, then the animal is in heat*/
-        public static bool IsInHeat(double cycleStartTotalDays, double timeBeforeHeatHours, double heatDurationHours, double totalDays)
-        {
-            double heatBeginsTotalDays = cycleStartTotalDays + (timeBeforeHeatHours / 24);
-            double heatEndsTotalDays = heatBeginsTotalDays + (heatDurationHours / 24);
-
-            if (totalDays >= heatBeginsTotalDays && totalDays <= heatEndsTotalDays) return true;
-            else return false;
         }
     }
 }

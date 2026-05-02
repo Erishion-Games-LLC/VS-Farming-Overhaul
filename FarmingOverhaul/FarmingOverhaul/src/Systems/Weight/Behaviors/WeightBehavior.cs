@@ -1,8 +1,10 @@
-﻿using FarmingOverhaul.src.Constants.AnimalConstants;
+﻿using FarmingOverhaul.src.Behaviors;
+using FarmingOverhaul.src.Constants.AnimalsConstants;
+using FarmingOverhaul.src.Helpers;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 
-namespace FarmingOverhaul.src.Behaviors
+namespace FarmingOverhaul.src.Systems.Weight.Behaviors
 {
     public class WeightBehavior(Entity entity) : BaseBehavior(entity)
     {

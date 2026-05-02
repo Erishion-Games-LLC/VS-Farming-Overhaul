@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using static FarmingOverhaul.src.HelperFunctions;
-namespace FarmingOverhaul.src.Constants.AnimalConstants
+﻿using FarmingOverhaul.src.Helpers.Validation;
+using System.Collections.Generic;
+using static FarmingOverhaul.src.Helpers.HelperFunctions;
+namespace FarmingOverhaul.src.Constants.AnimalsConstants
 {
     public class PregnancyConstants : IConstants
     {
@@ -10,9 +11,9 @@ namespace FarmingOverhaul.src.Constants.AnimalConstants
         public int MaxFetusAmount;
         public double LateGestationPercent;
 
-        public List<string> ValidateVariableRange()
+        public List<ValidationResult> ValidateVariableRange()
         {
-            List<string> errors = [];
+            List<ValidationResult> errors = [];
 
             AddIfNotNull(errors, ValidateRange(MinDaysPregnant, MaxDaysPregnant, nameof(MinDaysPregnant)));
             AddIfNotNull(errors, ValidateRange(MinFetusAmount, MaxFetusAmount, nameof(MinFetusAmount)));

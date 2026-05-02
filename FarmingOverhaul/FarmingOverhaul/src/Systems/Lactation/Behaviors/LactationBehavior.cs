@@ -3,7 +3,7 @@ using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 using Vintagestory.GameContent;
 
-namespace FarmingOverhaul.src.Behaviors
+namespace FarmingOverhaul.src.Systems.Lactation.Behaviors
 {
     //need to eventually overwrited and implement BaseBehavior
     public class LactationBehavior(Entity entity) : EntityBehaviorMilkable(entity)

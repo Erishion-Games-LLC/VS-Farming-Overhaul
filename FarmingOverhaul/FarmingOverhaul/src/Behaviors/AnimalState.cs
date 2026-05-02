@@ -1,4 +1,5 @@
-﻿using FarmingOverhaul.src.Constants.AnimalConstants;
+﻿using FarmingOverhaul.src.Constants.AnimalsConstants;
+using FarmingOverhaul.src.Helpers;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
@@ -48,7 +49,10 @@ namespace FarmingOverhaul.src.Behaviors
             set => TreeAccessor.SetDoubleInTree(nameof(BirthTotalDays), value);
         }
 
-        public string Origin;
+        public string Origin
+        {
+            get => TreeAccessor.GetStringFromWatchedAttributes(nameof(Origin).ToLower());
+        }
 
         public override void Initialize(EntityProperties properties, JsonObject attributes)
         {
@@ -60,7 +64,6 @@ namespace FarmingOverhaul.src.Behaviors
             Type = entity.Properties.Variant.TryGetValue(nameof(Type).ToLower());
             Age = entity.Properties.Variant.TryGetValue(nameof(Age).ToLower());
             Gender = entity.Properties.Variant.TryGetValue(nameof(Gender).ToLower());
-            Origin = TreeAccessor.GetStringFromWatchedAttributes(nameof(Origin).ToLower());
         }
 
         public override void OnEntityReceiveDamage(DamageSource damageSource, ref float damage)

@@ -1,95 +1,21 @@
+using FarmingOverhaul.src.Helpers.Validation;
 using System;
 using System.Collections.Generic;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 
-namespace FarmingOverhaul.src
+namespace FarmingOverhaul.src.Helpers
 {
     public static class HelperFunctions
     {
-        /// Returns a random integer between min and max, inclusive.
-        public static int GenerateRandomIntFromMinMaxInclusive(Random random, int min, int max)
+        public static bool HasTimeFinished(double totalDays, double start, double length)
         {
-            return random.Next(min, max + 1);
+            return totalDays >= start + length;
         }
 
-        /// Returns a random integer between 0 and max, inclusive.
-        public static int GenerateRandomIntFromMaxInclusive(Random random, int max)
+        public static void AddIfNotNull<T>(List<T> list, T? item) where T : class
         {
-            return random.Next(max + 1);
-
-        }
-
-        /// Returns a random double between min and max, inclusive.
-        public static double GenerateRandomDouble(Random random, double min, double max)
-        {
-            return (max - min) * random.NextDouble() + min;
-        }
-
-        //Returns a random number based on the normal distribution with the given mean and standard deviation,
-        //but if the number is outside of the given range, it will keep generating until it gets one that is within the range.
-        //The standard deviation is calculated based on the range so that 99.7% of the numbers will be within the range.
-        public static double SampleNormalDistributionInRange(Random random, double min, double max)
-        {
-            double val;
-            double standardDev = (max - min) / 6;
-            double mean = (max + min) / 2;
-
-            do { val = SampleGaussian(random, mean, standardDev); } 
-            while (val < min || val > max);
-
-            return val;
-        }
-               
-        public static double SampleNormalDistributionInRange(Random random, double min, double max, double mean, double stdDev)
-        {
-            double val;
-
-            do { val = SampleGaussian(random, mean, stdDev); }
-            while (val < min || val > max);
-            return val;
-        }
-
-        /// <summary>
-        /// This method uses the Box-Muller transform to generate values from a standard normal
-        /// distribution, which are then scaled and shifted to match the specified parameters.</summary>
-        /// <param name="random">The random number generator to use for producing the sample. Cannot be null.</param>
-        /// <param name="mean">The mean, or expected value, of the normal distribution. Determines the center of the distribution.</param>
-        /// <param name="stdDev">The standard deviation of the normal distribution. Must be non-negative. Determines the spread of the
-        /// distribution.</param>
-        /// <returns>A double-precision floating-point number sampled from the normal distribution defined by the specified mean
-        /// and standard deviation.</returns>
-        public static double SampleGaussian(Random random, double mean, double stdDev)
-        {
-            return mean + stdDev * SampleStandardNormalDistribution(random);
-        }
-
-        /// <summary>
-        /// Generates a random value sampled from the standard normal distribution.
-        /// </summary>
-        /// <remarks>This method uses the Box-Muller transform to convert uniformly distributed random
-        /// numbers into a normally distributed value.
-        /// <param name="random">The random number generator used to produce the sample. Must not be null.</param>
-        /// <returns>A double-precision floating-point number representing a random sample from the standard normal distribution,
-        /// with a mean of 0 and a standard deviation of 1.</returns>
-        public static double SampleStandardNormalDistribution(Random random)
-        {
-            double var1 = 1.0 - random.NextDouble();
-            double var2 = 1.0 - random.NextDouble();
-
-            return Math.Sqrt(-2.0 * Math.Log(var1)) * Math.Cos(2.0 * Math.PI * var2);
-        }
-
-        public static double GetGaussianWeight(double value, double min, double max, double stdDevSpread = 6)
-        {
-            double mean = (max + min) / 2;
-            double stdDev = (max - min) / stdDevSpread;
-
-            if (stdDev <= 0) return value == mean ? 1.0 : 0.0;
-
-            double stdDevsFromCenter = (value - mean) / stdDev;
-
-            return Math.Exp(-0.5 * stdDevsFromCenter * stdDevsFromCenter);
+            if (item != null) list.Add(item);
         }
 
         //Returns the species of the entity as a lowercase string.
@@ -98,21 +24,11 @@ namespace FarmingOverhaul.src
             return entity.Code.Path.Split('-')[0].ToLower();
         }
 
-        public static bool HasTimeFinished(double totalDays, double start, double length)
-        {
-            return totalDays >= start + length;
-        }
-
-        public static void AddIfNotNull<T>(List<T> list, T? item)
-        {
-            if (item != null) list.Add(item);
-        }
-
-        public static string? ValidateRange(double min, double max, string field)
+        public static ValidationResult? ValidateRange(double min, double max, string field)
         {
             if (min > max)
             {
-                return ($"{field} min value is greater than max value. Must be less than or equal to.");
+                return new ValidationResult(ValidationErrorType.MinGreaterThanMax, field);
             }
             else return null;
         }
@@ -157,6 +73,27 @@ namespace FarmingOverhaul.src
                 totalDays += daysPerMonth;
             }
             return monthStartDayDict;
+        }
+
+        //StartPercent MUSTBE less than EndPercent
+        public static (double start, double end) CreateSubWindowWithPercent(double parentStart, double parentEnd, double startPercent, double endPercent)
+        {
+            double duration = parentEnd - parentStart;
+            double start = parentStart + (duration * startPercent);
+            double end = parentStart + (duration * endPercent);
+            if (startPercent > endPercent)
+            {
+                throw new ArgumentException("Start Percent must be less than or equal to end percent");
+            }
+            return (start, end);
+        }
+
+        //Adds the start and end offset to the beginning
+        public static (double start, double end) CreateSubWindowWithOffsetsFromStart(double parentStart, double parentEnd, double offsetStart, double duration)
+        {
+            double start = parentStart + offsetStart;
+            double end = Math.Min(start + duration, parentEnd);
+            return (start, end);
         }
     }
 }

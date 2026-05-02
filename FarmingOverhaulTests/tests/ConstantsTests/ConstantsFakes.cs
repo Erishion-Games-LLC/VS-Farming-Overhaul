@@ -1,7 +1,7 @@
-﻿using FarmingOverhaul.src.Constants.AnimalConstants;
+﻿using FarmingOverhaul.src.Constants.AnimalsConstants;
 using Vintagestory.API.Common;
 
-namespace FarmingOverhaulTests.tests.Constants
+namespace FarmingOverhaulTests.tests.ConstantsTests
 {
     public static class ConstantsFakes
     {
@@ -12,7 +12,7 @@ namespace FarmingOverhaulTests.tests.Constants
                 Estrus = CreateDefaultEstrus(),
                 Pregnancy = CreateDefaultPregnancy(),
                 Breeding = CreateDefaultBreeding(),
-                Energy = CreateDefaultEnergy()                
+                Energy = CreateDefaultEnergy()
             };
             return animalConstants;
         }
@@ -24,14 +24,14 @@ namespace FarmingOverhaulTests.tests.Constants
                 BreedingSeason = [EnumMonth.March],
                 EstrusCycleMinDays = 1,
                 EstrusCycleMaxDays = 2,
-                TimeBeforeHeatMinHours = 1,
-                TimeBeforeHeatMaxHours = 2,
-                HeatDurationMinHours = 1,
-                HeatDurationMaxHours = 2,
-                TimeBeforePeakFertilityMinHours = 1,
-                TimeBeforePeakFertilityMaxHours = 2,
-                PeakFertilityMinHours = 1,
-                PeakFertilityMaxHours = 2
+                TimeBeforeHeatMinDays = 1,
+                TimeBeforeHeatMaxDays = 2,
+                HeatDurationMinDays = 1,
+                HeatDurationMaxDays = 2,
+                TimeBeforePeakFertilityMinDays = 1,
+                TimeBeforePeakFertilityMaxDays = 2,
+                PeakFertilityMinDays = 1,
+                PeakFertilityMaxDays = 2
             };
             return estrus;
         }

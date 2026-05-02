@@ -3,7 +3,7 @@ using Moq;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 
-namespace FarmingOverhaulTests.tests.Systems.Breeding.States
+namespace FarmingOverhaulTests.tests.SystemsTests.BreedingTests.StatesTests
 {
     public class FakesProvider
     {

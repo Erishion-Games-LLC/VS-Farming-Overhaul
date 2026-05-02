@@ -1,9 +1,10 @@
 ﻿using FarmingOverhaul.src.Behaviors;
+using FarmingOverhaul.src.Helpers;
 using System;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
-using static FarmingOverhaul.src.HelperFunctions;
+using static FarmingOverhaul.src.Helpers.HelperFunctions;
 
 namespace FarmingOverhaul.src.Systems.Breeding
 {
@@ -82,7 +83,7 @@ namespace FarmingOverhaul.src.Systems.Breeding
         private static string DetermineGender(Random rand)
         {
             //Roll a random integer between 0 and 1. If 0, gender is female. If 1, gender is male.
-            if (GenerateRandomIntFromMaxInclusive(rand, 1) == 0) return "female";
+            if (MathHelpers.GenerateRandomIntFromMaxInclusive(rand, 1) == 0) return "female";
             else return "male";
         }
     }

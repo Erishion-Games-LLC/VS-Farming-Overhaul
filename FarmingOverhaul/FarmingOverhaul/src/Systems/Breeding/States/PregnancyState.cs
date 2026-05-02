@@ -1,9 +1,10 @@
-﻿using FarmingOverhaul.src.Constants.AnimalConstants;
+﻿using FarmingOverhaul.src.Constants.AnimalsConstants;
+using FarmingOverhaul.src.Helpers;
 using FarmingOverhaul.src.Helpers.StateMachine;
 using FarmingOverhaul.src.Systems.Breeding.Enums;
 using System;
 using Vintagestory.API.Common;
-using static FarmingOverhaul.src.HelperFunctions;
+using static FarmingOverhaul.src.Helpers.HelperFunctions;
 
 namespace FarmingOverhaul.src.Systems.Breeding.States
 {
@@ -36,8 +37,8 @@ namespace FarmingOverhaul.src.Systems.Breeding.States
 
         public void EnterState(double transitionDays, EnumMonth transitionMonth)
         {
-            FetusAmount = (int)SampleNormalDistributionInRange(rand, pregnancy.MinFetusAmount, pregnancy.MaxFetusAmount);
-            LengthDays = SampleNormalDistributionInRange(rand, pregnancy.MinDaysPregnant, pregnancy.MaxDaysPregnant);
+            FetusAmount = (int)MathHelpers.SampleNormalDistributionInRange(rand, pregnancy.MinFetusAmount, pregnancy.MaxFetusAmount);
+            LengthDays = MathHelpers.SampleNormalDistributionInRange(rand, pregnancy.MinDaysPregnant, pregnancy.MaxDaysPregnant);
             StartTotalDays = transitionDays;
         }
 

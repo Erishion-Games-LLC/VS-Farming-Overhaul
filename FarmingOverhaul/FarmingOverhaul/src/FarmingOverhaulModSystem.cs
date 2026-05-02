@@ -1,6 +1,8 @@
 ﻿using FarmingOverhaul.src.Behaviors;
 using FarmingOverhaul.src.Config;
 using FarmingOverhaul.src.Systems.Breeding.Behaviors;
+using FarmingOverhaul.src.Systems.Lactation.Behaviors;
+using FarmingOverhaul.src.Systems.Weight.Behaviors;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;

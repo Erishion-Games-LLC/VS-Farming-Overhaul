@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
-using static FarmingOverhaul.src.HelperFunctions;
+using static FarmingOverhaul.src.Helpers.HelperFunctions;
 
 namespace FarmingOverhaul.src.Systems.Breeding.States
 {

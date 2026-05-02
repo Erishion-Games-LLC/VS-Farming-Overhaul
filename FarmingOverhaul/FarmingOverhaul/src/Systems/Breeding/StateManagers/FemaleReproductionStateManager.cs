@@ -1,5 +1,5 @@
 ﻿using FarmingOverhaul.src.Behaviors;
-using FarmingOverhaul.src.Constants.AnimalConstants;
+using FarmingOverhaul.src.Constants.AnimalsConstants;
 using FarmingOverhaul.src.Helpers.StateMachine;
 using FarmingOverhaul.src.Systems.Breeding.Enums;
 using System;

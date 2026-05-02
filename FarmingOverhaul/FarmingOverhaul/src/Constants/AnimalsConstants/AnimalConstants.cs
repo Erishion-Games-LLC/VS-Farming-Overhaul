@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using FarmingOverhaul.src.Helpers.Validation;
+using System.Collections.Generic;
 
-namespace FarmingOverhaul.src.Constants.AnimalConstants
+namespace FarmingOverhaul.src.Constants.AnimalsConstants
 {
     public class AnimalConstants
     {
@@ -10,9 +11,9 @@ namespace FarmingOverhaul.src.Constants.AnimalConstants
         public EnergyConstants Energy;
 
 
-        public List<string> Validate()
+        public List<ValidationResult> Validate()
         {
-            List<string> errors = [];
+            List<ValidationResult> errors = [];
 
             ValidateConstantsClass(Estrus, nameof(Estrus), errors);
             ValidateConstantsClass(Pregnancy, nameof(Pregnancy), errors);
@@ -22,11 +23,11 @@ namespace FarmingOverhaul.src.Constants.AnimalConstants
             return errors;
         }
 
-        private static void ValidateConstantsClass<T>(T classInstance, string name, List<string> errors) where T : class, IConstants
+        private static void ValidateConstantsClass<T>(T classInstance, string name, List<ValidationResult> errors) where T : class, IConstants
         {
             if (classInstance == null)
             {
-                errors.Add($"{name} constants cannot be null");
+                errors.Add(new ValidationResult(ValidationErrorType.NullClass, name));
                 return;
             }
             else
